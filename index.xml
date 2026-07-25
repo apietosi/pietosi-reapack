@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" name="PietosiPad" commit="5a4fd1f1475754e60649ec3bb9d1cdf2ae5b7cbd">
+<index version="1" name="PietosiPad" commit="8eb372f0eaedd39e3d4478a53e2c1fc3cce46a1b">
   <category name="Effects/PadLab">
     <reapack name="PadLab_Monitor.jsfx" type="effect" desc="PadLab_Monitor (MIDI learn bridge)">
       <version name="1.0.0" author="PadLab" time="2026-07-25T15:46:47Z">
@@ -72,6 +72,10 @@
     <reapack name="gp_import.lua" type="script" desc="gp_import">
       <version name="1.0.0" author="pie" time="2026-07-25T15:18:16Z">
         <source main="main">https://github.com/apietosi/pietosi-reapack/raw/1c2182a1bb2ed410cdac0237b3527263e0375c03/Scripts/GP2MIDI/gp_import.lua</source>
+      </version>
+      <version name="1.0.1" author="pie" time="2026-07-25T15:59:57Z">
+        <source main="main">https://github.com/apietosi/pietosi-reapack/raw/8eb372f0eaedd39e3d4478a53e2c1fc3cce46a1b/Scripts/GP2MIDI/gp_import.lua</source>
+        <source file="gp_clean.py">https://github.com/apietosi/pietosi-reapack/raw/8eb372f0eaedd39e3d4478a53e2c1fc3cce46a1b/Scripts/GP2MIDI/gp_clean.py</source>
       </version>
     </reapack>
   </category>
