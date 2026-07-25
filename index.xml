@@ -1,0 +1,552 @@
+<?xml version="1.0" encoding="utf-8"?>
+<index version="1" name="PietosiPad" commit="5a4fd1f1475754e60649ec3bb9d1cdf2ae5b7cbd">
+  <category name="Effects/PadLab">
+    <reapack name="PadLab_Monitor.jsfx" type="effect" desc="PadLab_Monitor (MIDI learn bridge)">
+      <version name="1.0.0" author="PadLab" time="2026-07-25T15:46:47Z">
+        <source type="effect">https://github.com/apietosi/pietosi-reapack/raw/5a4fd1f1475754e60649ec3bb9d1cdf2ae5b7cbd/Effects/PadLab/PadLab_Monitor.jsfx</source>
+      </version>
+    </reapack>
+    <reapack name="PadLab_NoteRepeat.jsfx" type="effect" desc="PadLab_NoteRepeat (hold pad to roll, Push-style)">
+      <version name="1.0.0" author="PadLab" time="2026-07-25T15:46:47Z">
+        <source type="effect">https://github.com/apietosi/pietosi-reapack/raw/5a4fd1f1475754e60649ec3bb9d1cdf2ae5b7cbd/Effects/PadLab/PadLab_NoteRepeat.jsfx</source>
+      </version>
+    </reapack>
+    <reapack name="PadLab_Router.jsfx" type="effect" desc="PadLab_Router (sample select / humanize)">
+      <version name="1.0.0" author="PadLab" time="2026-07-25T15:46:47Z">
+        <source type="effect">https://github.com/apietosi/pietosi-reapack/raw/5a4fd1f1475754e60649ec3bb9d1cdf2ae5b7cbd/Effects/PadLab/PadLab_Router.jsfx</source>
+      </version>
+    </reapack>
+  </category>
+  <category name="Effects/PietosiGlitch">
+    <reapack name="PietosiGlitch_808Wrecker.jsfx" type="effect" desc="PietosiGlitch: 808Wrecker (sub-safe morphing 808 corroder)">
+      <version name="1.0.0" author="Pietosi" time="2026-07-25T15:46:47Z">
+        <source type="effect">https://github.com/apietosi/pietosi-reapack/raw/5a4fd1f1475754e60649ec3bb9d1cdf2ae5b7cbd/Effects/PietosiGlitch/PietosiGlitch_808Wrecker.jsfx</source>
+      </version>
+    </reapack>
+    <reapack name="PietosiGlitch_BufferGlitch.jsfx" type="effect" desc="PietosiGlitch: BufferGlitch Pads (MIDI stutter/reverse/dive)">
+      <version name="1.0.0" author="Pietosi" time="2026-07-25T15:46:47Z">
+        <source type="effect">https://github.com/apietosi/pietosi-reapack/raw/5a4fd1f1475754e60649ec3bb9d1cdf2ae5b7cbd/Effects/PietosiGlitch/PietosiGlitch_BufferGlitch.jsfx</source>
+      </version>
+    </reapack>
+    <reapack name="PietosiGlitch_GhostComp.jsfx" type="effect" desc="PietosiGlitch: GhostComp (granular MIDI comper - freeze audio, play it as chords)">
+      <version name="1.0.0" author="Pietosi" time="2026-07-25T15:46:47Z">
+        <source type="effect">https://github.com/apietosi/pietosi-reapack/raw/5a4fd1f1475754e60649ec3bb9d1cdf2ae5b7cbd/Effects/PietosiGlitch/PietosiGlitch_GhostComp.jsfx</source>
+      </version>
+    </reapack>
+    <reapack name="PietosiGlitch_KickChokeCrusher.jsfx" type="effect" desc="PietosiGlitch: KickChokeCrusher (sidechain-driven lofi)">
+      <version name="1.0.0" author="Pietosi" time="2026-07-25T15:46:47Z">
+        <source type="effect">https://github.com/apietosi/pietosi-reapack/raw/5a4fd1f1475754e60649ec3bb9d1cdf2ae5b7cbd/Effects/PietosiGlitch/PietosiGlitch_KickChokeCrusher.jsfx</source>
+      </version>
+    </reapack>
+    <reapack name="PietosiGlitch_LeadDrift.jsfx" type="effect" desc="PietosiGlitch: LeadDrift (morphing lofi glitch for piano/leads)">
+      <version name="1.0.0" author="Pietosi" time="2026-07-25T15:46:47Z">
+        <source type="effect">https://github.com/apietosi/pietosi-reapack/raw/5a4fd1f1475754e60649ec3bb9d1cdf2ae5b7cbd/Effects/PietosiGlitch/PietosiGlitch_LeadDrift.jsfx</source>
+      </version>
+    </reapack>
+    <reapack name="PietosiGlitch_ProbabilityGlitch.jsfx" type="effect" desc="PietosiGlitch: ProbabilityGlitch (per-16th random stutter/reverse/crush/gate)">
+      <version name="1.0.0" author="Pietosi" time="2026-07-25T15:46:47Z">
+        <source type="effect">https://github.com/apietosi/pietosi-reapack/raw/5a4fd1f1475754e60649ec3bb9d1cdf2ae5b7cbd/Effects/PietosiGlitch/PietosiGlitch_ProbabilityGlitch.jsfx</source>
+      </version>
+    </reapack>
+  </category>
+  <category name="Effects/PietosiPad">
+    <reapack name="PietosiPad_Bridge.jsfx" type="effect" desc="PietosiPad_Bridge">
+      <version name="1.0.0" author="pie" time="2026-07-25T15:46:47Z">
+        <source type="effect">https://github.com/apietosi/pietosi-reapack/raw/5a4fd1f1475754e60649ec3bb9d1cdf2ae5b7cbd/Effects/PietosiPad/PietosiPad_Bridge.jsfx</source>
+      </version>
+    </reapack>
+  </category>
+  <category name="Scripts">
+    <reapack name="Pietosi_HatRandomRR_LoadRS5K.lua" type="script" desc="Pietosi_HatRandomRR_LoadRS5K">
+      <version name="1.0.0" author="pie" time="2026-07-25T15:18:16Z">
+        <source main="main">https://github.com/apietosi/pietosi-reapack/raw/1c2182a1bb2ed410cdac0237b3527263e0375c03/Scripts/Pietosi_HatRandomRR_LoadRS5K.lua</source>
+      </version>
+    </reapack>
+    <reapack name="TransientGridAlign.lua" type="script" desc="TransientGridAlign - Align transients to the grid">
+      <version name="1.0.0" author="pie" time="2026-07-25T15:18:16Z">
+        <source main="main">https://github.com/apietosi/pietosi-reapack/raw/1c2182a1bb2ed410cdac0237b3527263e0375c03/Scripts/TransientGridAlign.lua</source>
+      </version>
+    </reapack>
+  </category>
+  <category name="Scripts/GP2MIDI">
+    <reapack name="gp_import.lua" type="script" desc="gp_import">
+      <version name="1.0.0" author="pie" time="2026-07-25T15:18:16Z">
+        <source main="main">https://github.com/apietosi/pietosi-reapack/raw/1c2182a1bb2ed410cdac0237b3527263e0375c03/Scripts/GP2MIDI/gp_import.lua</source>
+      </version>
+    </reapack>
+  </category>
+  <category name="Scripts/MixLab">
+    <reapack name="MixLab.lua" type="script" desc="MixLab - unified vertical arranger + mixer (Bitwig-style deck)">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 One column per track: a vertical timeline lane on top (time flows downward) and a mixer strip directly beneath it. Audio items render vertical waveforms (stereo left/right split), MIDI items render as player-piano note punches. Scroll time with the wheel, zoom with ctrl+wheel, pan columns with shift+wheel. Click a lane to seek, click an item to select it, drag an item vertically to move it in time, double-click a MIDI item to open it in the MIDI editor. Keyboard: arrows switch tracks / trim volume, alt+arrows pan, M/S/R/F mute/solo/arm/fx, Q quantize (PietosiQuantize), 0 resets volume, Home rewinds, Space plays. Tab flips to the FX view: a full-window, keyboard-navigable FX chain + routing editor for the selected track. Dock it at the bottom of REAPER and it replaces mixer + playlist.\par}
+}
+]]></description>
+      </metadata>
+      <version name="0.10.1" author="pie" time="2026-07-25T15:18:16Z">
+        <source main="main">https://github.com/apietosi/pietosi-reapack/raw/1c2182a1bb2ed410cdac0237b3527263e0375c03/Scripts/MixLab/MixLab.lua</source>
+      </version>
+    </reapack>
+  </category>
+  <category name="Scripts/PadLab">
+    <reapack name="PadLab.lua" type="script" desc="PadLab - launchpad-style drum sampler for REAPER">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 One row per pad. Each row is a normal REAPER track holding native RS5K instances (one per sample), a note-repeat JSFX and a sample-router JSFX. Feed it folders, loose files, or Media Explorer databases; play pads from the GUI, a MIDI controller, or the virtual keyboard. Everything is plain tracks + FX, so routing/sidechain/buses and external scripting (MCP) all work natively.\par}
+}
+]]></description>
+      </metadata>
+      <version name="1.0.0" author="pie" time="2026-07-25T15:18:16Z">
+        <source main="main">https://github.com/apietosi/pietosi-reapack/raw/1c2182a1bb2ed410cdac0237b3527263e0375c03/Scripts/PadLab/PadLab.lua</source>
+      </version>
+    </reapack>
+  </category>
+  <category name="Scripts/PietosiGlitch">
+    <reapack name="PGlitchLib.lua" type="script" desc="PGlitchLib - Shared helpers for the PietosiGlitch tools">
+      <version name="1.0.0" author="pie" time="2026-07-25T15:18:16Z">
+        <source>https://github.com/apietosi/pietosi-reapack/raw/1c2182a1bb2ed410cdac0237b3527263e0375c03/Scripts/PietosiGlitch/PGlitchLib.lua</source>
+      </version>
+    </reapack>
+    <reapack name="PietosiGlitch_808GlideWriter.lua" type="script" desc="PietosiGlitch 808GlideWriter - turn selected notes into one gliding 808">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 MIDI editor script. Select a run of 808 notes: the first note is extended across the whole phrase, the others are removed, and pitch-bend ramps glide to each subsequent pitch. Set BEND_RANGE to match your sampler/synth's pitch bend range (semitones)!\par}
+}
+]]></description>
+      </metadata>
+      <version name="1.0.0" author="pie" time="2026-07-25T15:18:16Z">
+        <source main="midi_editor">https://github.com/apietosi/pietosi-reapack/raw/1c2182a1bb2ed410cdac0237b3527263e0375c03/Scripts/PietosiGlitch/PietosiGlitch_808GlideWriter.lua</source>
+      </version>
+    </reapack>
+    <reapack name="PietosiGlitch_BuildupMachine.lua" type="script" desc="PietosiGlitch BuildupMachine - accelerating fill into the downbeat">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 Rebuilds the last 4 beats of the selected item as an accelerating stutter: grid repeats -> grid x2 -> grid x4 -> reversed crash slice. With grid 1/8 that's the classic 1/8 -> 1/16 -> 1/32 riser; coarser grid = chunkier trap fill, finer grid = drill madness. One keypress. Undo restores.\par}
+}
+]]></description>
+      </metadata>
+      <version name="1.0.0" author="pie" time="2026-07-25T15:18:16Z">
+        <source main="main">https://github.com/apietosi/pietosi-reapack/raw/1c2182a1bb2ed410cdac0237b3527263e0375c03/Scripts/PietosiGlitch/PietosiGlitch_BuildupMachine.lua</source>
+      </version>
+    </reapack>
+    <reapack name="PietosiGlitch_HalfTimeFlip.lua" type="script" desc="PietosiGlitch HalfTimeFlip - toggle dark half-speed on items">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 Drops the selected items to half playrate with preserve-pitch OFF: everything an octave down and sludgy, same item length (plays the first half of the content). Run again to restore the original rate.\par}
+}
+]]></description>
+      </metadata>
+      <version name="1.0.0" author="pie" time="2026-07-25T15:18:16Z">
+        <source main="main">https://github.com/apietosi/pietosi-reapack/raw/1c2182a1bb2ed410cdac0237b3527263e0375c03/Scripts/PietosiGlitch/PietosiGlitch_HalfTimeFlip.lua</source>
+      </version>
+    </reapack>
+    <reapack name="PietosiGlitch_ReverseEveryOther.lua" type="script" desc="PietosiGlitch ReverseEveryOther - flip every 2nd selected slice">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 Toggles take-reverse on every second selected slice (sorted by time). Run twice to restore the audio (slices stay). An unchopped item gets chopped on the project grid first, so the grid sets the flip rate: 1/8 = churning chugs, 1/16 = zipper texture.\par}
+}
+]]></description>
+      </metadata>
+      <version name="1.0.0" author="pie" time="2026-07-25T15:18:16Z">
+        <source main="main">https://github.com/apietosi/pietosi-reapack/raw/1c2182a1bb2ed410cdac0237b3527263e0375c03/Scripts/PietosiGlitch/PietosiGlitch_ReverseEveryOther.lua</source>
+      </version>
+    </reapack>
+    <reapack name="PietosiGlitch_ShuffleSlices.lua" type="script" desc="PietosiGlitch ShuffleSlices - randomly reorder selected slices">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 One keypress randomly reorders the selected slices within their span. Run again for a new roll. An unchopped item gets chopped on the project grid first, so the grid selection sets the slice size: 1/4 = chunky rearrange, 1/32 = granular smear.\par}
+}
+]]></description>
+      </metadata>
+      <version name="1.0.0" author="pie" time="2026-07-25T15:18:16Z">
+        <source main="main">https://github.com/apietosi/pietosi-reapack/raw/1c2182a1bb2ed410cdac0237b3527263e0375c03/Scripts/PietosiGlitch/PietosiGlitch_ShuffleSlices.lua</source>
+      </version>
+    </reapack>
+    <reapack name="PietosiGlitch_TapeStopTail.lua" type="script" desc="PietosiGlitch TapeStopTail - rendered-in tape stop on the last grid division">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 Splits off the final grid division of the selected item and writes decelerating varispeed stretch markers into it (preserve-pitch off): a real tape stop, baked into the item, no plugin. The grid sets the stop length: 1/1 = long dramatic dive, 1/4 = one-beat stop, 1/16 = quick hiccup. Undo restores.\par}
+}
+]]></description>
+      </metadata>
+      <version name="1.0.0" author="pie" time="2026-07-25T15:18:16Z">
+        <source main="main">https://github.com/apietosi/pietosi-reapack/raw/1c2182a1bb2ed410cdac0237b3527263e0375c03/Scripts/PietosiGlitch/PietosiGlitch_TapeStopTail.lua</source>
+      </version>
+    </reapack>
+    <reapack name="PietosiGlitch_VocalChopGen.lua" type="script" desc="PietosiGlitch VocalChopGen - grid-chop + random scale pitches">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 Splits the selected item on the project grid and pitches every slice to a random note of a minor scale (preserve-pitch on = chipmunk formants). The hyperpop vocal chop generator. Run again for a new roll.\par}
+}
+]]></description>
+      </metadata>
+      <version name="1.0.0" author="pie" time="2026-07-25T15:18:16Z">
+        <source main="main">https://github.com/apietosi/pietosi-reapack/raw/1c2182a1bb2ed410cdac0237b3527263e0375c03/Scripts/PietosiGlitch/PietosiGlitch_VocalChopGen.lua</source>
+      </version>
+    </reapack>
+    <reapack name="PietosiGlitch_WheelGateChop.lua" type="script" desc="PietosiGlitch WheelGateChop - wheel gates the item on the grid">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 Bind to a mousewheel gesture. Splits the selected item on the project grid and mutes slices in patterns that get denser as you scroll up: every 8th -> every 4th -> every 2nd -> 3 of 4 -> 7 of 8. Wheel down eases off; level 0 restores the whole item. Non-destructive (mutes only).\par}
+}
+]]></description>
+      </metadata>
+      <version name="1.0.0" author="pie" time="2026-07-25T15:18:16Z">
+        <source main="main">https://github.com/apietosi/pietosi-reapack/raw/1c2182a1bb2ed410cdac0237b3527263e0375c03/Scripts/PietosiGlitch/PietosiGlitch_WheelGateChop.lua</source>
+      </version>
+    </reapack>
+    <reapack name="PietosiGlitch_WheelPitchLadder.lua" type="script" desc="PietosiGlitch WheelPitchLadder - wheel pitches slices into a riser">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 Bind to a mousewheel gesture. On a chopped item (WheelSplit it first, or this splits a whole item into 8), each wheel tick adds +1 semitone per slice (riser); wheel down goes negative (collapse-faller). Zero restores.\par}
+}
+]]></description>
+      </metadata>
+      <version name="1.0.0" author="pie" time="2026-07-25T15:18:16Z">
+        <source main="main">https://github.com/apietosi/pietosi-reapack/raw/1c2182a1bb2ed410cdac0237b3527263e0375c03/Scripts/PietosiGlitch/PietosiGlitch_WheelPitchLadder.lua</source>
+      </version>
+    </reapack>
+    <reapack name="PietosiGlitch_WheelStutter.lua" type="script" desc="PietosiGlitch WheelStutter - wheel retriggers the last beat">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 Bind to a mousewheel gesture. Wheel up: the final beat of the selected item becomes 2, 4, 8... repeats of its own first slice (the trap fill). Wheel down relaxes it back to the untouched item.\par}
+}
+]]></description>
+      </metadata>
+      <version name="1.0.0" author="pie" time="2026-07-25T15:18:16Z">
+        <source main="main">https://github.com/apietosi/pietosi-reapack/raw/1c2182a1bb2ed410cdac0237b3527263e0375c03/Scripts/PietosiGlitch/PietosiGlitch_WheelStutter.lua</source>
+      </version>
+    </reapack>
+  </category>
+  <category name="Scripts/PietosiKeys">
+    <reapack name="PietosiKeys_Build.lua" type="script" desc="PietosiKeys - build the no-mouse keymap for native REAPER">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 Generates PietosiKeys.ReaperKeyMap. v0.6 is the UNIFIED scheme: navigation and the shared verbs are bound IDENTICALLY in all four modes - only the number row (the mode's palette) and a few documented mode letters change per mode.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Everywhere (MIX / EDIT / REC / AUTO): Up/Down = track nav, Left/Right = native scrub (left unbound on purpose), Ctrl+arrows = item walk (2D), Alt+L/R = transients, Shift+Up/Down = track volume, Shift+L/R = pan, Alt+Up/Down = pitch, M/S mute/solo, R record (auto-arm), Shift+R arm, Shift+M monitor, G grab, X split, D duplicate, Z razor, Q quantize, F/Tab FX chain, I routing, 0 vol reset, Shift+0 master 0 dB, Shift+1-6 grid sizes, Enter -> EDIT, W -> REC, A -> AUTO, Esc backs out one level. Palettes (number row): MIX 1-8 = select track 1-8, EDIT 1-7 = glitch one-keys, REC 1-3 = record modes, AUTO 1-5 = automation modes.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Every action id is resolved BY NAME on this machine at build time, so nothing is hardcoded. Unresolvable actions are skipped and reported. Run this script once, then: Actions window > Key map... (bottom left) > Import... > KeyMaps\\PietosiKeys.ReaperKeyMap.\par}
+}
+]]></description>
+      </metadata>
+      <version name="0.6.0" author="pie" time="2026-07-25T15:18:16Z">
+        <source main="main">https://github.com/apietosi/pietosi-reapack/raw/1c2182a1bb2ed410cdac0237b3527263e0375c03/Scripts/PietosiKeys/PietosiKeys_Build.lua</source>
+      </version>
+    </reapack>
+    <reapack name="PietosiKeys_ModeHUD.lua" type="script" desc="PietosiKeys ModeHUD - flash the active key-mode on switch">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 Background watcher for the PietosiKeys layers. Whenever the main-section override changes (stock / MIX alt-1 / EDIT alt-2 / REC alt-3 / AUTO alt-4) it flashes the mode name in large text near the top of the REAPER window, fading out after about a second. Click-through, no interaction. v0.2: also flashes the grid division (GRID 1/16, 1/8T, 1/8. ...) whenever it changes - pairs with the Num +/-/*// grid keys. Auto-started from Scripts/__startup.lua.\par}
+}
+]]></description>
+      </metadata>
+      <version name="0.2.0" author="pie" time="2026-07-25T15:18:16Z">
+        <source main="main">https://github.com/apietosi/pietosi-reapack/raw/1c2182a1bb2ed410cdac0237b3527263e0375c03/Scripts/PietosiKeys/PietosiKeys_ModeHUD.lua</source>
+      </version>
+    </reapack>
+    <reapack name="PietosiKeys_SendDestNext.lua" type="script" desc="PietosiKeys SendDestNext - cycle last send's destination channels up">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 Ported from MixLab's ] key. Moves the LAST send of the selected track to the next destination channel pair (1/2 -> 3/4 -> 5/6 -> 7/8 -> 1/2), widening the destination track as needed. Tooltip shows where it landed.\par}
+}
+]]></description>
+      </metadata>
+      <version name="0.1.0" author="pie" time="2026-07-25T15:18:16Z">
+        <source main="main">https://github.com/apietosi/pietosi-reapack/raw/1c2182a1bb2ed410cdac0237b3527263e0375c03/Scripts/PietosiKeys/PietosiKeys_SendDestNext.lua</source>
+      </version>
+    </reapack>
+    <reapack name="PietosiKeys_SendDestPrev.lua" type="script" desc="PietosiKeys SendDestPrev - cycle last send's destination channels down">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 Counterpart to SendDestNext (MixLab's [ key): previous channel pair.\par}
+}
+]]></description>
+      </metadata>
+      <version name="0.1.0" author="pie" time="2026-07-25T15:18:16Z">
+        <source main="main">https://github.com/apietosi/pietosi-reapack/raw/1c2182a1bb2ed410cdac0237b3527263e0375c03/Scripts/PietosiKeys/PietosiKeys_SendDestPrev.lua</source>
+      </version>
+    </reapack>
+    <reapack name="PietosiKeys_Sidechain.lua" type="script" desc="PietosiKeys Sidechain - one-key sidechain feed for the selected track">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 Ported from MixLab's C key. Opens a type-to-filter track picker; Enter creates the sidechain: source track -> channels 3/4 of the SELECTED track (widened to 4 channels if needed), and the focused FX's aux input pins (3rd/4th input) are pointed at those channels (falls back to the first FX in the chain). You still enable the detector/ext-input inside the plugin. Keyboard: type to filter, up/down select, Enter apply, Esc cancel.\par}
+}
+]]></description>
+      </metadata>
+      <version name="0.1.0" author="pie" time="2026-07-25T15:18:16Z">
+        <source main="main">https://github.com/apietosi/pietosi-reapack/raw/1c2182a1bb2ed410cdac0237b3527263e0375c03/Scripts/PietosiKeys/PietosiKeys_Sidechain.lua</source>
+      </version>
+    </reapack>
+    <reapack name="PietosiKeys_ViewWatch.lua" type="script" desc="PietosiKeys ViewWatch - per-mode track view (vertical mixer / lean playlist)">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 Background watcher pairing the track view with the PietosiKeys modes: MIX (alt-1): every track is at least MIX_MIN_H px tall, so the TCP shows fader/meter on each strip - the panel becomes a vertical mixer, with each strip on the same row as its own lane. EDIT (alt-2): tracks with no items are minimized (or hidden, see EMPTY_MODE), so the playlist only shows editable lanes. Leaving a mode restores every track exactly as it was. Rescans every 1.5 s, so tracks pop back the moment they gain items. State lives in track P_EXT (survives project save/reload). If MIX_LAYOUT/EDIT_LAYOUT name TCP layouts of the current theme, they're applied per mode too. Auto-started from __startup.lua.\par}
+}
+]]></description>
+      </metadata>
+      <version name="0.3.0" author="pie" time="2026-07-25T15:18:16Z">
+        <source main="main">https://github.com/apietosi/pietosi-reapack/raw/1c2182a1bb2ed410cdac0237b3527263e0375c03/Scripts/PietosiKeys/PietosiKeys_ViewWatch.lua</source>
+      </version>
+    </reapack>
+    <reapack name="PietosiView_Midi.lua" type="script" desc="PietosiView - MIDI view (F3): fullscreen MIDI editor">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 One of the three PietosiKeys full-screen views: F1 playlist-only F2 fullscreen mixer F3 fullscreen MIDI editor Opens the selected item in the built-in MIDI editor (if nothing is selected, grabs the item under the edit cursor on the selected track), then loads window set #07 so a docked editor gets its saved fullscreen layout. With a floating editor just maximize it once - REAPER remembers. No MIDI item to target = silent no-op (same rule as the wheel gadgets). F1 / F2 are bound inside the MIDI editor too, so they exit this view.\par}
+}
+]]></description>
+      </metadata>
+      <version name="1.0.0" author="pie" time="2026-07-25T15:18:16Z">
+        <source main="main">https://github.com/apietosi/pietosi-reapack/raw/1c2182a1bb2ed410cdac0237b3527263e0375c03/Scripts/PietosiKeys/PietosiView_Midi.lua</source>
+      </version>
+    </reapack>
+    <reapack name="PietosiView_Mixer.lua" type="script" desc="PietosiView - Mixer view (F2): fullscreen mixer, thin arrange strip">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 One of the three PietosiKeys full-screen views: F1 playlist-only F2 fullscreen mixer F3 fullscreen MIDI editor Closes any MIDI editor, loads window set #06, and makes sure the mixer is visible. Save the set once with the mixer docked and dragged nearly full height (right-click mixer > Dock mixer in docker), FX inserts / sends / I-O enabled in the mixer right-click menu, and a thin zoomed-out arrange strip left above it.\par}
+}
+]]></description>
+      </metadata>
+      <version name="1.0.0" author="pie" time="2026-07-25T15:18:16Z">
+        <source main="main">https://github.com/apietosi/pietosi-reapack/raw/1c2182a1bb2ed410cdac0237b3527263e0375c03/Scripts/PietosiKeys/PietosiView_Mixer.lua</source>
+      </version>
+    </reapack>
+    <reapack name="PietosiView_Playlist.lua" type="script" desc="PietosiView - Playlist view (F1): arrange fills the screen">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 One of the three PietosiKeys full-screen views: F1 playlist-only F2 fullscreen mixer F3 fullscreen MIDI editor Closes any MIDI editor, loads window set #05, and hides the mixer. Save the set once (View > Screensets/Layouts > Windows tab > set 5 > Save) with the layout you want; until then the script still guarantees a clean playlist by closing the editor and hiding the mixer itself.\par}
+}
+]]></description>
+      </metadata>
+      <version name="1.0.0" author="pie" time="2026-07-25T15:18:16Z">
+        <source main="main">https://github.com/apietosi/pietosi-reapack/raw/1c2182a1bb2ed410cdac0237b3527263e0375c03/Scripts/PietosiKeys/PietosiView_Playlist.lua</source>
+      </version>
+    </reapack>
+  </category>
+  <category name="Scripts/PietosiPad">
+    <reapack name="PietosiPad.lua" type="script" desc="PietosiPad - Launchpad MK1 control surface for the PietosiKeys modes">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 Background watcher that turns a Launchpad MK1 into a mode-aware control surface for the PietosiKeys layers.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Top row of round buttons: first four = the hardware arrows, and they are contextual per mode (MIX: left/right slide the 8-track window by 1, up/down jump it by 8 - so the grid is never stuck on 8 channels; other modes: up/down = prev/next track, left/right = move edit cursor by grid). Last four = mode selectors MIX / EDIT / REC / AUTO.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Right-side round column is global in every mode: play, record, metronome, FX chain, routing, quantize, master 0 dB, Esc.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 The 8x8 grid changes with the mode: MIX - live feedback mixer, each column = one visible track (select / vol +- / pan / mute / solo / arm) EDIT - row 1 walk/select (items, transients, razor), row 2 item verbs (split, dup, nudge, pitch, MIDI editor), row 4 the glitch one-keys 1-7 + ShotSwap, row 5 grid sizes (active one bright) REC - record modes / pre-roll / monitor / loop / lanes, punch points, take prev-next / crop AUTO - automation mode of selected tracks (trim/read/touch/write/latch), envelope visibility and points\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 The Launchpad is never routed to any track: input is polled with MIDI_GetRecentInputEvent, and LED feedback goes out through a hidden bridge track ("#PietosiPad Bridge") running PietosiPad_Bridge.jsfx, whose MIDI hardware output is set to the Launchpad.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Auto-started from Scripts/__startup.lua (same pattern as ModeHUD).\par}
+}
+]]></description>
+      </metadata>
+      <version name="0.4.0" author="pie" time="2026-07-25T15:18:16Z">
+        <source main="main">https://github.com/apietosi/pietosi-reapack/raw/1c2182a1bb2ed410cdac0237b3527263e0375c03/Scripts/PietosiPad/PietosiPad.lua</source>
+      </version>
+    </reapack>
+  </category>
+  <category name="Scripts/PietosiQuantize">
+    <reapack name="PietosiQuantize.lua" type="script" desc="PietosiQuantize - audio quantizer with onset backtracking">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 Transient-based audio quantizer for selected items. Designed to fix the common failure modes of envelope-gate quantizers:\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Onset backtracking: after the envelope gate fires, the detector walks backward to the real attack start, so detection points don't lag hot hits less and soft hits more.\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab No hidden retrigger floor: the Retrig slider is honored down to 5 ms, so fast rolls and flams stay separate hits.\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Grid matching keeps the CLOSEST or the STRONGEST transient per gridline (selectable) and quantizes each hit to the line it matched, never to "whatever grid happens to be nearest after moving".\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Grid is computed from the project tempo map + swing directly; the script never touches snap settings or the arrange view. Analyze the sum of all selected items (multitrack-safe: cuts land at the same times on every selected track), audition the markers on the waveform, click markers to drop bad ones, then apply in Split mode (split + move + heal + crossfade) or Warp mode (stretch markers). Requires ReaImGui. No SWS needed.\sa180\par}
+}
+]]></description>
+      </metadata>
+      <version name="0.1.0" author="pie" time="2026-07-25T15:18:16Z">
+        <source main="main">https://github.com/apietosi/pietosi-reapack/raw/1c2182a1bb2ed410cdac0237b3527263e0375c03/Scripts/PietosiQuantize/PietosiQuantize.lua</source>
+      </version>
+    </reapack>
+  </category>
+  <category name="Scripts/PietosiRudiments">
+    <reapack name="PietosiRudiments_Core.lua" type="script" desc="PietosiRudiments_Core - Shared rudiment-writing engine">
+      <version name="1.0.0" author="pie" time="2026-07-25T15:18:16Z">
+        <source>https://github.com/apietosi/pietosi-reapack/raw/1c2182a1bb2ed410cdac0237b3527263e0375c03/Scripts/PietosiRudiments/PietosiRudiments_Core.lua</source>
+      </version>
+    </reapack>
+    <reapack name="Rudiment 1 - Single Stroke Roll.lua" type="script" desc="PietosiRudiments 1 - Single Stroke Roll">
+      <version name="1.0.0" author="pie" time="2026-07-25T15:18:16Z">
+        <source main="midi_editor">https://github.com/apietosi/pietosi-reapack/raw/1c2182a1bb2ed410cdac0237b3527263e0375c03/Scripts/PietosiRudiments/Rudiment%201%20-%20Single%20Stroke%20Roll.lua</source>
+      </version>
+    </reapack>
+    <reapack name="Rudiment 2 - Double Stroke Roll.lua" type="script" desc="PietosiRudiments 2 - Double Stroke Roll">
+      <version name="1.0.0" author="pie" time="2026-07-25T15:18:16Z">
+        <source main="midi_editor">https://github.com/apietosi/pietosi-reapack/raw/1c2182a1bb2ed410cdac0237b3527263e0375c03/Scripts/PietosiRudiments/Rudiment%202%20-%20Double%20Stroke%20Roll.lua</source>
+      </version>
+    </reapack>
+    <reapack name="Rudiment 3 - Single Paradiddle.lua" type="script" desc="PietosiRudiments 3 - Single Paradiddle">
+      <version name="1.0.0" author="pie" time="2026-07-25T15:18:16Z">
+        <source main="midi_editor">https://github.com/apietosi/pietosi-reapack/raw/1c2182a1bb2ed410cdac0237b3527263e0375c03/Scripts/PietosiRudiments/Rudiment%203%20-%20Single%20Paradiddle.lua</source>
+      </version>
+    </reapack>
+    <reapack name="Rudiment 4 - Double Paradiddle.lua" type="script" desc="PietosiRudiments 4 - Double Paradiddle">
+      <version name="1.0.0" author="pie" time="2026-07-25T15:18:16Z">
+        <source main="midi_editor">https://github.com/apietosi/pietosi-reapack/raw/1c2182a1bb2ed410cdac0237b3527263e0375c03/Scripts/PietosiRudiments/Rudiment%204%20-%20Double%20Paradiddle.lua</source>
+      </version>
+    </reapack>
+    <reapack name="Rudiment 5 - Paradiddle-Diddle.lua" type="script" desc="PietosiRudiments 5 - Paradiddle-Diddle">
+      <version name="1.0.0" author="pie" time="2026-07-25T15:18:16Z">
+        <source main="midi_editor">https://github.com/apietosi/pietosi-reapack/raw/1c2182a1bb2ed410cdac0237b3527263e0375c03/Scripts/PietosiRudiments/Rudiment%205%20-%20Paradiddle-Diddle.lua</source>
+      </version>
+    </reapack>
+    <reapack name="Rudiment 6 - Flam Tap.lua" type="script" desc="PietosiRudiments 6 - Flam Tap">
+      <version name="1.0.0" author="pie" time="2026-07-25T15:18:16Z">
+        <source main="midi_editor">https://github.com/apietosi/pietosi-reapack/raw/1c2182a1bb2ed410cdac0237b3527263e0375c03/Scripts/PietosiRudiments/Rudiment%206%20-%20Flam%20Tap.lua</source>
+      </version>
+    </reapack>
+    <reapack name="Rudiment 7 - Flamadiddle.lua" type="script" desc="PietosiRudiments 7 - Flamadiddle">
+      <version name="1.0.0" author="pie" time="2026-07-25T15:18:16Z">
+        <source main="midi_editor">https://github.com/apietosi/pietosi-reapack/raw/1c2182a1bb2ed410cdac0237b3527263e0375c03/Scripts/PietosiRudiments/Rudiment%207%20-%20Flamadiddle.lua</source>
+      </version>
+    </reapack>
+    <reapack name="Rudiment 8 - Single Drag Tap.lua" type="script" desc="PietosiRudiments 8 - Single Drag Tap">
+      <version name="1.0.0" author="pie" time="2026-07-25T15:18:16Z">
+        <source main="midi_editor">https://github.com/apietosi/pietosi-reapack/raw/1c2182a1bb2ed410cdac0237b3527263e0375c03/Scripts/PietosiRudiments/Rudiment%208%20-%20Single%20Drag%20Tap.lua</source>
+      </version>
+    </reapack>
+    <reapack name="Rudiment 9 - Flam Accent.lua" type="script" desc="PietosiRudiments 9 - Flam Accent">
+      <version name="1.0.0" author="pie" time="2026-07-25T15:18:16Z">
+        <source main="midi_editor">https://github.com/apietosi/pietosi-reapack/raw/1c2182a1bb2ed410cdac0237b3527263e0375c03/Scripts/PietosiRudiments/Rudiment%209%20-%20Flam%20Accent.lua</source>
+      </version>
+    </reapack>
+  </category>
+  <category name="Scripts/PietosiUtils">
+    <reapack name="PietosiShotSwap.lua" type="script" desc="PietosiShotSwap - reroll every item's sample from a Media Explorer database">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 Pick one of your Media Explorer databases, hit ROLL TRACK: every item on the selected track gets its sample replaced by a random file from that database, so every hit is unique. Positions, lengths, rates and pitches are untouched (optionally fit item length to the new sample). "One-shots only" filters the database by file length using the metadata already in the .ReaperFileList, so loops never sneak in. "No repeats" deals samples like a shuffled deck - nothing repeats until the pool runs out. One undo point per roll: don't like it? Ctrl+Z and roll again.\par}
+}
+]]></description>
+      </metadata>
+      <version name="0.1.0" author="pie" time="2026-07-25T15:18:16Z">
+        <source main="main">https://github.com/apietosi/pietosi-reapack/raw/1c2182a1bb2ed410cdac0237b3527263e0375c03/Scripts/PietosiUtils/PietosiShotSwap.lua</source>
+      </version>
+    </reapack>
+    <reapack name="PietosiWheelSplit.lua" type="script" desc="PietosiWheelSplit - wheel splits selected items into equal parts">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 Bind to a mousewheel gesture (e.g. Ctrl+wheel): select an item, scroll up and it becomes 2 equal pieces, then 3, 4... in the same overall span. Scroll down to merge back until it's whole again. Contiguous selected pieces (like the ones this script makes) are treated as one group; every separately-selected item gets its own count. Also runs from a key (acts like one wheel-up tick).\par}
+}
+]]></description>
+      </metadata>
+      <version name="0.1.0" author="pie" time="2026-07-25T15:18:16Z">
+        <source main="main">https://github.com/apietosi/pietosi-reapack/raw/1c2182a1bb2ed410cdac0237b3527263e0375c03/Scripts/PietosiUtils/PietosiWheelSplit.lua</source>
+      </version>
+    </reapack>
+    <reapack name="Smart cursor left (grid if snap else pixel).lua" type="script" desc="Smart cursor left (grid if snap else pixel)">
+      <version name="1.0.0" author="pie" time="2026-07-25T15:18:16Z">
+        <source main="main">https://github.com/apietosi/pietosi-reapack/raw/1c2182a1bb2ed410cdac0237b3527263e0375c03/Scripts/PietosiUtils/Smart%20cursor%20left%20(grid%20if%20snap%20else%20pixel).lua</source>
+      </version>
+    </reapack>
+    <reapack name="Smart cursor right (grid if snap else pixel).lua" type="script" desc="Smart cursor right (grid if snap else pixel)">
+      <version name="1.0.0" author="pie" time="2026-07-25T15:18:16Z">
+        <source main="main">https://github.com/apietosi/pietosi-reapack/raw/1c2182a1bb2ed410cdac0237b3527263e0375c03/Scripts/PietosiUtils/Smart%20cursor%20right%20(grid%20if%20snap%20else%20pixel).lua</source>
+      </version>
+    </reapack>
+  </category>
+  <category name="Scripts/PostMix">
+    <reapack name="PostMix_Apply_Instrument_Strips.lua" type="script" desc="PostMix_Apply_Instrument_Strips">
+      <version name="1.0.0" author="pie" time="2026-07-25T15:18:16Z">
+        <source main="main">https://github.com/apietosi/pietosi-reapack/raw/1c2182a1bb2ed410cdac0237b3527263e0375c03/Scripts/PostMix/PostMix_Apply_Instrument_Strips.lua</source>
+      </version>
+    </reapack>
+    <reapack name="PostMix_Apply_SmartStrip_By_Name.lua" type="script" desc="PostMix_Apply_SmartStrip_By_Name">
+      <version name="1.0.0" author="pie" time="2026-07-25T15:18:16Z">
+        <source main="main">https://github.com/apietosi/pietosi-reapack/raw/1c2182a1bb2ed410cdac0237b3527263e0375c03/Scripts/PostMix/PostMix_Apply_SmartStrip_By_Name.lua</source>
+      </version>
+    </reapack>
+    <reapack name="PostMix_Apply_Vocal_Strips.lua" type="script" desc="PostMix_Apply_Vocal_Strips">
+      <version name="1.0.0" author="pie" time="2026-07-25T15:18:16Z">
+        <source main="main">https://github.com/apietosi/pietosi-reapack/raw/1c2182a1bb2ed410cdac0237b3527263e0375c03/Scripts/PostMix/PostMix_Apply_Vocal_Strips.lua</source>
+      </version>
+    </reapack>
+    <reapack name="PostMix_Solo_EQ_Helper.lua" type="script" desc="PostMix_Solo_EQ_Helper">
+      <version name="1.0.0" author="pie" time="2026-07-25T15:18:16Z">
+        <source main="main">https://github.com/apietosi/pietosi-reapack/raw/1c2182a1bb2ed410cdac0237b3527263e0375c03/Scripts/PostMix/PostMix_Solo_EQ_Helper.lua</source>
+      </version>
+    </reapack>
+    <reapack name="PostMix_Solo_Vocal_Helper.lua" type="script" desc="PostMix_Solo_Vocal_Helper">
+      <version name="1.0.0" author="pie" time="2026-07-25T15:18:16Z">
+        <source main="main">https://github.com/apietosi/pietosi-reapack/raw/1c2182a1bb2ed410cdac0237b3527263e0375c03/Scripts/PostMix/PostMix_Solo_Vocal_Helper.lua</source>
+      </version>
+    </reapack>
+    <reapack name="PostMix_Wire_Kick_to_808_Duck.lua" type="script" desc="PostMix_Wire_Kick_to_808_Duck">
+      <version name="1.0.0" author="pie" time="2026-07-25T15:18:16Z">
+        <source main="main">https://github.com/apietosi/pietosi-reapack/raw/1c2182a1bb2ed410cdac0237b3527263e0375c03/Scripts/PostMix/PostMix_Wire_Kick_to_808_Duck.lua</source>
+      </version>
+    </reapack>
+  </category>
+</index>
