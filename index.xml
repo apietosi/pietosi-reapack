@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" commit="1c2182a1bb2ed410cdac0237b3527263e0375c03">
+<index version="1" commit="1c2182a1bb2ed410cdac0237b3527263e0375c03" name="PietosiPad">
   <category name="Scripts">
     <reapack name="Pietosi_HatRandomRR_LoadRS5K.lua" type="script" desc="Pietosi_HatRandomRR_LoadRS5K">
       <version name="1.0.0" author="pie" time="2026-07-25T15:18:16Z">
