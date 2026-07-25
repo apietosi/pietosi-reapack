@@ -1,0 +1,51 @@
+# Machine-specific REAPER config -- never sync these between the PC and the Mac.
+# reaper.ini holds the audio device, plugin scan paths and MIDI device indices.
+reaper.ini
+reaper.ini.bak
+REAPER.ini
+# Keymap + custom actions + script registrations, all mixed into one file.
+# Pulling this onto another machine silently overwrites that machine's keymap.
+reaper-kb.ini
+reaper-kb.ini.bak-*
+# Per-machine state
+reaper-*.log
+reaper-recentfx.ini
+reaper-hwoutfx.ini
+reaper-defpresets.ini
+reaper-fxoptions.ini
+reaper-wndpos.ini
+reaper-screensets.ini
+reaper-extstate.ini
+# Plugin caches -- regenerated on scan
+reaper-vstplugins*.ini
+reaper-clap*.ini
+reaper-jsfx.ini
+reaper-auplugins*.ini
+plugin_cache*
+# ReaPack's own state -- reinstall ReaPack per platform instead
+ReaPack/
+reapack.ini
+UserPlugins/
+*.dll
+*.dylib
+*.so
+# Rendered audio -- keep the repo about the tools, not the output
+*.wav
+*.aiff
+*.flac
+*.mp3
+*.ogg
+Render/
+render/
+# Project files and their backups
+*.rpp-bak
+*.rpp-PROX
+*.rpp-UNDO
+*.reapeaks
+# OS noise
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+desktop.ini
