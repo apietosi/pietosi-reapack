@@ -1,5 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" commit="1c2182a1bb2ed410cdac0237b3527263e0375c03" name="PietosiPad">
+<index version="1" commit="5a4fd1f1475754e60649ec3bb9d1cdf2ae5b7cbd" name="PietosiPad">
+  <category name="Effects/PadLab">
+    <reapack name="PadLab_Monitor.jsfx" type="effect" desc="PadLab_Monitor (MIDI learn bridge)">
+      <version name="1.0.0" author="PadLab" time="2026-07-25T15:46:47Z">
+        <source type="effect">https://github.com/apietosi/pietosi-reapack/raw/5a4fd1f1475754e60649ec3bb9d1cdf2ae5b7cbd/Effects/PadLab/PadLab_Monitor.jsfx</source>
+      </version>
+    </reapack>
+    <reapack name="PadLab_NoteRepeat.jsfx" type="effect" desc="PadLab_NoteRepeat (hold pad to roll, Push-style)">
+      <version name="1.0.0" author="PadLab" time="2026-07-25T15:46:47Z">
+        <source type="effect">https://github.com/apietosi/pietosi-reapack/raw/5a4fd1f1475754e60649ec3bb9d1cdf2ae5b7cbd/Effects/PadLab/PadLab_NoteRepeat.jsfx</source>
+      </version>
+    </reapack>
+    <reapack name="PadLab_Router.jsfx" type="effect" desc="PadLab_Router (sample select / humanize)">
+      <version name="1.0.0" author="PadLab" time="2026-07-25T15:46:47Z">
+        <source type="effect">https://github.com/apietosi/pietosi-reapack/raw/5a4fd1f1475754e60649ec3bb9d1cdf2ae5b7cbd/Effects/PadLab/PadLab_Router.jsfx</source>
+      </version>
+    </reapack>
+  </category>
+  <category name="Effects/PietosiGlitch">
+    <reapack name="PietosiGlitch_808Wrecker.jsfx" type="effect" desc="PietosiGlitch: 808Wrecker (sub-safe morphing 808 corroder)">
+      <version name="1.0.0" author="Pietosi" time="2026-07-25T15:46:47Z">
+        <source type="effect">https://github.com/apietosi/pietosi-reapack/raw/5a4fd1f1475754e60649ec3bb9d1cdf2ae5b7cbd/Effects/PietosiGlitch/PietosiGlitch_808Wrecker.jsfx</source>
+      </version>
+    </reapack>
+    <reapack name="PietosiGlitch_BufferGlitch.jsfx" type="effect" desc="PietosiGlitch: BufferGlitch Pads (MIDI stutter/reverse/dive)">
+      <version name="1.0.0" author="Pietosi" time="2026-07-25T15:46:47Z">
+        <source type="effect">https://github.com/apietosi/pietosi-reapack/raw/5a4fd1f1475754e60649ec3bb9d1cdf2ae5b7cbd/Effects/PietosiGlitch/PietosiGlitch_BufferGlitch.jsfx</source>
+      </version>
+    </reapack>
+    <reapack name="PietosiGlitch_GhostComp.jsfx" type="effect" desc="PietosiGlitch: GhostComp (granular MIDI comper - freeze audio, play it as chords)">
+      <version name="1.0.0" author="Pietosi" time="2026-07-25T15:46:47Z">
+        <source type="effect">https://github.com/apietosi/pietosi-reapack/raw/5a4fd1f1475754e60649ec3bb9d1cdf2ae5b7cbd/Effects/PietosiGlitch/PietosiGlitch_GhostComp.jsfx</source>
+      </version>
+    </reapack>
+    <reapack name="PietosiGlitch_KickChokeCrusher.jsfx" type="effect" desc="PietosiGlitch: KickChokeCrusher (sidechain-driven lofi)">
+      <version name="1.0.0" author="Pietosi" time="2026-07-25T15:46:47Z">
+        <source type="effect">https://github.com/apietosi/pietosi-reapack/raw/5a4fd1f1475754e60649ec3bb9d1cdf2ae5b7cbd/Effects/PietosiGlitch/PietosiGlitch_KickChokeCrusher.jsfx</source>
+      </version>
+    </reapack>
+    <reapack name="PietosiGlitch_LeadDrift.jsfx" type="effect" desc="PietosiGlitch: LeadDrift (morphing lofi glitch for piano/leads)">
+      <version name="1.0.0" author="Pietosi" time="2026-07-25T15:46:47Z">
+        <source type="effect">https://github.com/apietosi/pietosi-reapack/raw/5a4fd1f1475754e60649ec3bb9d1cdf2ae5b7cbd/Effects/PietosiGlitch/PietosiGlitch_LeadDrift.jsfx</source>
+      </version>
+    </reapack>
+    <reapack name="PietosiGlitch_ProbabilityGlitch.jsfx" type="effect" desc="PietosiGlitch: ProbabilityGlitch (per-16th random stutter/reverse/crush/gate)">
+      <version name="1.0.0" author="Pietosi" time="2026-07-25T15:46:47Z">
+        <source type="effect">https://github.com/apietosi/pietosi-reapack/raw/5a4fd1f1475754e60649ec3bb9d1cdf2ae5b7cbd/Effects/PietosiGlitch/PietosiGlitch_ProbabilityGlitch.jsfx</source>
+      </version>
+    </reapack>
+  </category>
+  <category name="Effects/PietosiPad">
+    <reapack name="PietosiPad_Bridge.jsfx" type="effect" desc="PietosiPad_Bridge">
+      <version name="1.0.0" author="pie" time="2026-07-25T15:46:47Z">
+        <source type="effect">https://github.com/apietosi/pietosi-reapack/raw/5a4fd1f1475754e60649ec3bb9d1cdf2ae5b7cbd/Effects/PietosiPad/PietosiPad_Bridge.jsfx</source>
+      </version>
+    </reapack>
+  </category>
   <category name="Scripts">
     <reapack name="Pietosi_HatRandomRR_LoadRS5K.lua" type="script" desc="Pietosi_HatRandomRR_LoadRS5K">
       <version name="1.0.0" author="pie" time="2026-07-25T15:18:16Z">
