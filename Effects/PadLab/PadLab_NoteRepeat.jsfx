@@ -1,0 +1,216 @@
+desc:PadLab_NoteRepeat (hold pad to roll, Push-style)
+
+// @description PadLab_NoteRepeat
+// @version 1.0.0
+// @author pie
+// @provides [effect] .
+//tags: MIDI processing
+//author: PadLab
+
+slider1:enabled=0<0,1,1{Off,On}>Repeat
+slider2:rate=3<0,7,1{1/4,1/8,1/8T,1/16,1/16T,1/32,1/32T,1/64}>Rate
+slider3:gate=60<5,100,1>Gate %
+slider4:velmode=0<0,1,1{As played,Fixed}>Velocity Mode
+slider5:fixedvel=110<1,127,1>Fixed Velocity
+slider6:maprpt=-1<-1,255,1>-Map Repeat (0-127 CC / 128-255 note+128)
+slider7:maprptmode=0<0,1,1{Momentary,Toggle}>-Repeat Button Mode
+slider8:maprate=-1<-1,255,1>-Map Rate (CC = absolute / note = step up)
+slider9:mapratedn=-1<-1,255,1>-Map Rate Down (CC or note = step down)
+
+in_pin:none
+out_pin:none
+
+@init
+MAXH = 16;   // max simultaneously held notes
+SLOT = 8;    // fields: 0=active 1=note 2=vel(as played) 3=chan 4=nextOn(beat) 5=offAt(beat) 6=sounding
+buf = 0;
+freebeat = 0;
+lastrb = -1;
+prev_en = 0;
+midi_on = 0;
+lastrptcc = 0;
+lastdncc = 0;
+
+function get_rb() (
+  rate == 0 ? 1 :
+  rate == 1 ? 0.5 :
+  rate == 2 ? 1/3 :
+  rate == 3 ? 0.25 :
+  rate == 4 ? 1/6 :
+  rate == 5 ? 0.125 :
+  rate == 6 ? 1/12 :
+  0.0625;
+);
+
+// lock every held pad to the grid starting from beat nb
+function realign(nb) local(i) (
+  i = 0;
+  while (i < MAXH) (
+    buf[i*SLOT] ? (
+      buf[i*SLOT+4] = (floor(nb / rb) + 1) * rb;
+      buf[i*SLOT+5] = min(nb + rb * gate * 0.01, buf[i*SLOT+4]);
+      buf[i*SLOT+6] = 1;
+    );
+    i += 1;
+  );
+);
+
+function find_slot(note, ch) local(i, s) (
+  s = -1; i = 0;
+  while (i < MAXH) (
+    buf[i*SLOT] && buf[i*SLOT+1] == note && buf[i*SLOT+3] == ch ? s = i;
+    i += 1;
+  );
+  s;
+);
+
+@block
+spb = srate * 60 / max(tempo, 1);
+startbeat = (play_state & 1) ? beat_position : freebeat;
+endbeat = startbeat + samplesblock / spb;
+rb = get_rb();
+cur_en = (enabled >= 0.5) || midi_on;
+
+// rate changed (slider or mapped control): re-align to the new grid
+rb != lastrb ? (
+  cur_en ? realign(startbeat);
+  lastrb = rb;
+);
+
+// repeat switched on via slider since last block: pads already held start rolling
+cur_en && !prev_en ? realign(startbeat);
+prev_en = cur_en;
+
+while (midirecv(ofs, m1, m2, m3)) (
+  st = m1 & 0xF0;
+  ch = m1 & 0x0F;
+  ison  = (st == 0x90 && m3 > 0);
+  isoff = (st == 0x80 || (st == 0x90 && m3 == 0));
+  iscc  = (st == 0xB0);
+  handled = 0;
+
+  // ---- mapped repeat button ----
+  maprpt >= 0 ? (
+    (iscc && maprpt < 128 && m2 == maprpt) ? (
+      was = cur_en;
+      maprptmode < 0.5 ? (
+        midi_on = m3 >= 64;
+      ) : (
+        m3 >= 64 && lastrptcc < 64 ? midi_on = !midi_on;
+      );
+      lastrptcc = m3;
+      cur_en = (enabled >= 0.5) || midi_on;
+      cur_en && !was ? realign(startbeat + ofs / spb);
+      prev_en = cur_en;
+      handled = 1;
+    );
+    (!handled && maprpt >= 128 && (ison || isoff) && m2 == maprpt - 128) ? (
+      was = cur_en;
+      maprptmode < 0.5 ? (
+        midi_on = ison;
+      ) : (
+        ison ? midi_on = !midi_on;
+      );
+      cur_en = (enabled >= 0.5) || midi_on;
+      cur_en && !was ? realign(startbeat + ofs / spb);
+      prev_en = cur_en;
+      handled = 1;
+    );
+  );
+
+  // ---- mapped rate ----
+  !handled && maprate >= 0 ? (
+    (iscc && maprate < 128 && m2 == maprate) ? (
+      rate = min(floor(m3 / 16), 7);   // knob/fader sweeps 1/4 -> 1/64
+      handled = 1;
+    ) : (maprate >= 128 && (ison || isoff) && m2 == maprate - 128) ? (
+      ison ? rate = min(rate + 1, 7);  // button steps faster
+      handled = 1;
+    );
+  );
+  !handled && mapratedn >= 0 ? (
+    (iscc && mapratedn < 128 && m2 == mapratedn) ? (
+      m3 >= 64 && lastdncc < 64 ? rate = max(rate - 1, 0);
+      lastdncc = m3;
+      handled = 1;
+    ) : (mapratedn >= 128 && (ison || isoff) && m2 == mapratedn - 128) ? (
+      ison ? rate = max(rate - 1, 0);  // button steps slower
+      handled = 1;
+    );
+  );
+
+  // ---- pad notes ----
+  handled ? 0 :
+  ison ? (
+    slot = find_slot(m2, ch);
+    slot < 0 ? (
+      // free slot
+      i = 0;
+      while (i < MAXH) (
+        !buf[i*SLOT] && slot < 0 ? slot = i;
+        i += 1;
+      );
+    );
+    slot >= 0 ? (
+      nowbeat = startbeat + ofs / spb;
+      outv = cur_en && velmode >= 0.5 ? fixedvel : m3;
+      buf[slot*SLOT+6] && buf[slot*SLOT] ? midisend(ofs, 0x80 | ch, m2, 0); // retrigger
+      midisend(ofs, 0x90 | ch, m2, outv);          // first hit always fires immediately
+      buf[slot*SLOT]   = 1;
+      buf[slot*SLOT+1] = m2;
+      buf[slot*SLOT+2] = m3;                        // remember played velocity
+      buf[slot*SLOT+3] = ch;
+      buf[slot*SLOT+4] = (floor(nowbeat / rb) + 1) * rb;
+      buf[slot*SLOT+5] = min(nowbeat + rb * gate * 0.01, buf[slot*SLOT+4]);
+      buf[slot*SLOT+6] = 1;
+    ) : midisend(ofs, m1, m2, m3);
+  ) : isoff ? (
+    slot = find_slot(m2, ch);
+    slot >= 0 ? (
+      buf[slot*SLOT+6] ? midisend(ofs, 0x80 | ch, m2, 0);
+      buf[slot*SLOT] = 0;
+    ) : midisend(ofs, m1, m2, m3);
+  ) : midisend(ofs, m1, m2, m3);
+);
+
+// schedule the repeats that land inside this block
+cur_en ? (
+  i = 0;
+  while (i < MAXH) (
+    buf[i*SLOT] ? (
+      // transport jumped (loop/seek): re-align
+      (buf[i*SLOT+4] < startbeat - rb || buf[i*SLOT+4] > endbeat + 4*rb) ? (
+        buf[i*SLOT+4] = (floor(startbeat / rb) + 1) * rb;
+        buf[i*SLOT+5] = min(buf[i*SLOT+5], buf[i*SLOT+4]);
+      );
+      guard = 0;
+      while (
+        did = 0;
+        // pending gate note-off
+        buf[i*SLOT+6] && buf[i*SLOT+5] < endbeat && buf[i*SLOT+5] <= buf[i*SLOT+4] ? (
+          o = max(0, floor((buf[i*SLOT+5] - startbeat) * spb));
+          midisend(min(o, samplesblock - 1), 0x80 | buf[i*SLOT+3], buf[i*SLOT+1], 0);
+          buf[i*SLOT+6] = 0;
+          did = 1;
+        );
+        // next repeat hit
+        buf[i*SLOT+4] < endbeat ? (
+          o = max(0, floor((buf[i*SLOT+4] - startbeat) * spb));
+          o = min(o, samplesblock - 1);
+          buf[i*SLOT+6] ? midisend(o, 0x80 | buf[i*SLOT+3], buf[i*SLOT+1], 0);
+          v = velmode >= 0.5 ? fixedvel : buf[i*SLOT+2];
+          midisend(o, 0x90 | buf[i*SLOT+3], buf[i*SLOT+1], v);
+          buf[i*SLOT+6] = 1;
+          buf[i*SLOT+5] = buf[i*SLOT+4] + rb * gate * 0.01;
+          buf[i*SLOT+4] += rb;
+          did = 1;
+        );
+        guard += 1;
+        did && guard < 256;
+      );
+    );
+    i += 1;
+  );
+);
+
+freebeat = (play_state & 1) ? beat_position + samplesblock / spb : freebeat + samplesblock / spb;

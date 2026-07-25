@@ -1,0 +1,176 @@
+desc:PietosiGlitch: 808Wrecker (sub-safe morphing 808 corroder)
+
+// @description PietosiGlitch_808Wrecker
+// @version 1.0.0
+// @author pie
+// @provides [effect] .
+//tags: glitch 808 morph
+//author: Pietosi
+
+slider1:20<0,100,1>MORPH base %
+slider2:0<0,6,1{Off,Sine,Triangle,Ramp,Square,S&H,Drift}>MORPH LFO shape
+slider3:64<0.25,256,0.25>MORPH LFO period (beats)
+slider4:50<-100,100,1>MORPH LFO depth %
+slider5:0<-100,100,1>Sidechain -> MORPH %
+slider6:150<20,1000,1>Sidechain release ms
+slider7:130<60,300,1>Crossover Hz
+slider8:6<0,24,0.1>Sub drive dB
+slider9:0<-12,12,0.1>Sub level dB
+slider10:25<0,100,1>Tops crush %
+slider11:60<-100,100,1>Crush -> morph %
+slider12:0<0,4,1{Off,Offbeat 8ths,16ths 3of4,Tresillo,Random 16ths}>Gate pattern
+slider13:100<0,100,1>Gate depth %
+slider14:50<-100,100,1>Gate -> morph %
+slider15:0<0,100,1>Noise smear %
+slider16:50<-100,100,1>Noise -> morph %
+slider17:0<0,100,1>Dive probability %
+slider18:40<-100,100,1>Dive -> morph %
+slider19:0.99993<0.9999,0.99999,0.000002>Dive decay
+slider20:0<-12,12,0.1>Output dB
+
+in_pin:left
+in_pin:right
+in_pin:sidechain left
+in_pin:sidechain right
+out_pin:left
+out_pin:right
+
+// Everything below the crossover stays MONO and CLEAN (drive + level only) --
+// the 808's foundation never corrodes. MORPH only destroys the tops:
+// crush, gate-chop, noise smear keyed to the attack, and tape-dive stutters
+// rolled on transients. Kick on ch 3/4 can push (or duck) MORPH.
+
+@init
+divlen = srate;
+dv0 = 0; dv1 = divlen;
+freembuf(divlen * 2 + 64);
+dvp = 0;
+lp0 = 0; lp1 = 0;
+lph = 0; prevph = 0; lval = 0; shval = rand(1);
+dph = 0; dtarget = rand(1); driftv = 0.5;
+scenv = 0; msm = 0;
+bpos = 0; laststep = -1; randgate = 1;
+fenv = 0; senv = 0;
+diveactive = 0; cooldown = 0;
+gsm = 1;
+cnt = 0; hh0 = 0; hh1 = 0;
+af = exp(-1/(srate * 0.001));
+fr = exp(-1/(srate * 0.05));
+sr2 = exp(-1/(srate * 0.3));
+
+@slider
+xk = 1 - exp(-2 * $pi * slider7 / srate);
+scR = exp(-1/(srate * slider6 * 0.001));
+scA = exp(-1/(srate * 3 * 0.001));
+pre = 2 ^ (slider8 / 6);
+subgain = 2 ^ (slider9 / 6);
+outgain = 2 ^ (slider20 / 6);
+
+@block
+bspl = max(tempo, 1) / (60 * srate);
+per = max(slider3, 0.25);
+(play_state & 1) ? (
+  bpos = beat_position;
+  lph = bpos / per; lph -= floor(lph);
+) : (
+  lph += samplesblock * bspl / per; lph -= floor(lph);
+);
+lph < prevph ? shval = rand(1);
+prevph = lph;
+dph += samplesblock * bspl / per * 8;
+dph >= 1 ? ( dph -= floor(dph); dtarget = rand(1); );
+driftv += (dtarget - driftv) * 0.02;
+sh = slider2;
+lval = (sh == 1) ? 0.5 - 0.5 * cos(2 * $pi * lph) :
+       (sh == 2) ? 1 - abs(2 * lph - 1) :
+       (sh == 3) ? lph :
+       (sh == 4) ? (lph < 0.5) :
+       (sh == 5) ? shval :
+       (sh == 6) ? driftv : 0;
+morphblk = slider1 * 0.01 + lval * slider4 * 0.01;
+
+@sample
+sc = max(abs(spl2), abs(spl3));
+sc > scenv ? scenv = sc + scA * (scenv - sc) : scenv = sc + scR * (scenv - sc);
+m = morphblk + min(scenv * 2, 1) * slider5 * 0.01;
+m < 0 ? m = 0; m > 1 ? m = 1;
+msm += (m - msm) * 0.0008;
+morph = msm;
+
+l = spl0; r = spl1;
+
+// ---- crossover (first-order complementary: sums flat) ----
+lp0 += xk * (l - lp0); lp1 += xk * (r - lp1);
+hl = l - lp0; hr = r - lp1;
+sub = (lp0 + lp1) * 0.5;
+
+// ---- sub: mono + saturation, never glitched ----
+subx = sub * pre;
+sub = subx / (1 + 0.5 * abs(subx)) * subgain;
+
+// ---- tops envelopes (transient detect + noise key) ----
+ae = max(abs(hl), abs(hr));
+ae > fenv ? fenv = ae + af * (fenv - ae) : fenv = ae + fr * (fenv - ae);
+senv = ae + sr2 * (senv - ae);
+
+// ---- dive stutter (tape-dive replay rolled on transients) ----
+dv0[dvp] = hl; dv1[dvp] = hr;
+cooldown > 0 ? cooldown -= 1;
+deff = slider17 * 0.01 + morph * slider18 * 0.01;
+deff < 0 ? deff = 0; deff > 1 ? deff = 1;
+diveactive == 0 && cooldown <= 0 && fenv > senv * 2 && fenv > 0.05 ? (
+  rand(1) < deff ? (
+    diveactive = 1; dvrate = 1; dvpos = dvp;
+    cooldown = floor(0.5 * 60 / max(tempo, 1) * srate);
+  ) : (
+    cooldown = floor(0.1 * srate);
+  );
+);
+diveactive ? (
+  dvrate *= slider19;
+  dvpos += dvrate; dvpos >= divlen ? dvpos -= divlen;
+  di = floor(dvpos);
+  hl = dv0[di] * dvrate; hr = dv1[di] * dvrate;
+  dvrate < 0.25 ? diveactive = 0;
+);
+dvp += 1; dvp >= divlen ? dvp = 0;
+
+// ---- gate chop ----
+pat = slider12;
+geff = slider13 * 0.01 + morph * slider14 * 0.01;
+geff < 0 ? geff = 0; geff > 1 ? geff = 1;
+st = floor(bpos * 4);
+sti = st % 16;
+st != laststep ? ( laststep = st; randgate = rand(1) < 0.5; );
+gon = (pat == 0) ? 1 :
+      (pat == 1) ? ((st % 4) < 2) :
+      (pat == 2) ? ((st % 4) != 3) :
+      (pat == 3) ? (sti == 0 || sti == 3 || sti == 6 || sti == 8 || sti == 11 || sti == 14) :
+      randgate;
+gt = gon ? 1 : 1 - geff;
+gsm += (gt - gsm) * 0.008;
+hl *= gsm; hr *= gsm;
+bpos += bspl;
+
+// ---- noise smear (keyed to attack envelope) ----
+neff = slider15 * 0.01 + morph * slider16 * 0.01;
+neff < 0 ? neff = 0; neff > 1 ? neff = 1;
+neff > 0.001 ? (
+  hl += (rand(2) - 1) * fenv * neff * 0.8;
+  hr += (rand(2) - 1) * fenv * neff * 0.8;
+);
+
+// ---- crush tops ----
+ceff = slider10 * 0.01 + morph * slider11 * 0.01;
+ceff < 0 ? ceff = 0; ceff > 1 ? ceff = 1;
+ceff > 0.001 ? (
+  fac = 1 + floor(ceff * 19);
+  cnt += 1;
+  cnt >= fac ? ( cnt = 0; hh0 = hl; hh1 = hr; );
+  q = 2 ^ (16 - ceff * 12);
+  hl = floor(hh0 * q + 0.5) / q;
+  hr = floor(hh1 * q + 0.5) / q;
+);
+
+spl0 = (sub + hl) * outgain;
+spl1 = (sub + hr) * outgain;

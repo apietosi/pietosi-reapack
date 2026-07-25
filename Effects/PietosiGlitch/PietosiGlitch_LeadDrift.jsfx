@@ -1,0 +1,195 @@
+desc:PietosiGlitch: LeadDrift (morphing lofi glitch for piano/leads)
+
+// @description PietosiGlitch_LeadDrift
+// @version 1.0.0
+// @author pie
+// @provides [effect] .
+//tags: glitch lofi morph
+//author: Pietosi
+
+slider1:25<0,100,1>MORPH base %
+slider2:0<0,6,1{Off,Sine,Triangle,Ramp,Square,S&H,Drift}>MORPH LFO shape
+slider3:64<0.25,256,0.25>MORPH LFO period (beats)
+slider4:50<-100,100,1>MORPH LFO depth %
+slider5:0<-100,100,1>Sidechain -> MORPH %
+slider6:150<20,1000,1>Sidechain release ms
+slider7:30<0,100,1>Wow amount %
+slider8:40<-100,100,1>Wow -> morph %
+slider9:1.2<0.1,8,0.1>Wow rate Hz
+slider10:0<0,100,1>Stutter probability %
+slider11:50<-100,100,1>Stutter -> morph %
+slider12:1<0,2,1{1/16,1/8,1/4}>Stutter unit
+slider13:0<0,100,1>Crush amount %
+slider14:60<-100,100,1>Crush -> morph %
+slider15:0<0,1,1{Full,Sides only}>Crush target
+slider16:100<0,200,1>Stereo width %
+slider17:0<0,30,0.5>Haas offset ms
+slider18:0<-100,100,1>Stereo -> morph %
+slider19:0<0,100,1>Delay mix %
+slider20:40<-100,100,1>Delay -> morph %
+slider21:1<0,3,1{1/8,1/8 dotted,1/4,1/2}>Delay time
+slider22:45<0,95,1>Delay feedback %
+slider23:35<0,100,1>Delay grit %
+
+in_pin:left
+in_pin:right
+in_pin:sidechain left
+in_pin:sidechain right
+out_pin:left
+out_pin:right
+
+// Route the kick (or anything) to ch 3/4 to push MORPH from the sidechain
+// (negative amounts duck the glitch out of the kick's way instead).
+// Chain: wow/flutter -> stutter -> crush -> stereo -> dirty delay.
+// Constant ~10ms latency from the wow line so morphing never clicks.
+
+@init
+wowlen = 8192;
+wow0 = 0; wow1 = wowlen;
+stlen = srate * 2;
+sb0 = wowlen * 2; sb1 = sb0 + stlen;
+dlen = srate * 4;
+db0 = sb1 + stlen; db1 = db0 + dlen;
+haaslen = 8192;
+hb = db1 + dlen;
+freembuf(hb + haaslen + 64);
+wowp = 0; stp = 0; dp = 0; hp = 0;
+lph = 0; prevph = 0; lval = 0; shval = rand(1);
+dph = 0; dtarget = rand(1); driftv = 0.5;
+scenv = 0; msm = 0;
+bpos = 0; lastb = -1;
+stactive = 0;
+wph1 = 0; wph2 = 0;
+cnt = 0; hh0 = 0; hh1 = 0;
+
+@slider
+scR = exp(-1/(srate * slider6 * 0.001));
+scA = exp(-1/(srate * 3 * 0.001));
+stunit = (slider12 == 0) ? 0.25 : (slider12 == 1) ? 0.5 : 1;
+dbeats = (slider21 == 0) ? 0.5 : (slider21 == 1) ? 0.75 : (slider21 == 2) ? 1 : 2;
+
+@block
+bspl = max(tempo, 1) / (60 * srate);
+per = max(slider3, 0.25);
+(play_state & 1) ? (
+  bpos = beat_position;
+  lph = bpos / per; lph -= floor(lph);
+) : (
+  lph += samplesblock * bspl / per; lph -= floor(lph);
+);
+lph < prevph ? shval = rand(1);
+prevph = lph;
+dph += samplesblock * bspl / per * 8;
+dph >= 1 ? ( dph -= floor(dph); dtarget = rand(1); );
+driftv += (dtarget - driftv) * 0.02;
+sh = slider2;
+lval = (sh == 1) ? 0.5 - 0.5 * cos(2 * $pi * lph) :
+       (sh == 2) ? 1 - abs(2 * lph - 1) :
+       (sh == 3) ? lph :
+       (sh == 4) ? (lph < 0.5) :
+       (sh == 5) ? shval :
+       (sh == 6) ? driftv : 0;
+morphblk = slider1 * 0.01 + lval * slider4 * 0.01;
+dsamps = floor(dbeats * 60 / max(tempo, 1) * srate);
+dsamps > dlen - 2 ? dsamps = dlen - 2;
+
+@sample
+sc = max(abs(spl2), abs(spl3));
+sc > scenv ? scenv = sc + scA * (scenv - sc) : scenv = sc + scR * (scenv - sc);
+m = morphblk + min(scenv * 2, 1) * slider5 * 0.01;
+m < 0 ? m = 0; m > 1 ? m = 1;
+msm += (m - msm) * 0.0008;
+morph = msm;
+
+l = spl0; r = spl1;
+
+// ---- wow/flutter ----
+weff = slider7 * 0.01 + morph * slider8 * 0.01;
+weff < 0 ? weff = 0; weff > 1 ? weff = 1;
+wow0[wowp] = l; wow1[wowp] = r;
+wph1 += 2 * $pi * slider9 / srate; wph1 >= 2 * $pi ? wph1 -= 2 * $pi;
+wph2 += 2 * $pi * slider9 * 5.7 / srate; wph2 >= 2 * $pi ? wph2 -= 2 * $pi;
+wmod = sin(wph1) + 0.35 * sin(wph2);
+rdp = wowp - (srate * 0.01 + weff * srate * 0.004 * wmod);
+rdp < 0 ? rdp += wowlen;
+ri = floor(rdp); rf = rdp - ri;
+ri2 = ri + 1; ri2 >= wowlen ? ri2 -= wowlen;
+l = wow0[ri] * (1 - rf) + wow0[ri2] * rf;
+r = wow1[ri] * (1 - rf) + wow1[ri2] * rf;
+wowp += 1; wowp >= wowlen ? wowp = 0;
+
+// ---- stutter injector (rolls dice each 16th) ----
+sb0[stp] = l; sb1[stp] = r;
+newb = floor(bpos * 4);
+newb != lastb ? (
+  lastb = newb;
+  seff = slider10 * 0.01 + morph * slider11 * 0.01;
+  seff < 0 ? seff = 0; seff > 1 ? seff = 1;
+  stactive <= 0 && rand(1) < seff ? (
+    stactive = floor(stunit * 60 / max(tempo, 1) * srate);
+    stloop = floor(stactive * 0.5);
+    stloop < 32 ? stloop = 32;
+    strev = rand(1) < 0.3;
+    ststart = stp - stloop; ststart < 0 ? ststart += stlen;
+    strp = 0;
+  );
+);
+stactive > 0 ? (
+  strev ? idx = ststart + stloop - 1 - floor(strp) : idx = ststart + floor(strp);
+  idx >= stlen ? idx -= stlen; idx < 0 ? idx += stlen;
+  l = sb0[idx]; r = sb1[idx];
+  strp += 1; strp >= stloop ? strp = 0;
+  stactive -= 1;
+);
+stp += 1; stp >= stlen ? stp = 0;
+bpos += bspl;
+
+// ---- crush ----
+ceff = slider13 * 0.01 + morph * slider14 * 0.01;
+ceff < 0 ? ceff = 0; ceff > 1 ? ceff = 1;
+ceff > 0.001 ? (
+  fac = 1 + floor(ceff * 19);
+  cnt += 1;
+  cnt >= fac ? ( cnt = 0; hh0 = l; hh1 = r; );
+  q = 2 ^ (16 - ceff * 12);
+  slider15 ? (
+    sid = (hh0 - hh1) * 0.5;
+    sid = floor(sid * q + 0.5) / q;
+    mid = (l + r) * 0.5;
+    l = mid + sid; r = mid - sid;
+  ) : (
+    l = floor(hh0 * q + 0.5) / q;
+    r = floor(hh1 * q + 0.5) / q;
+  );
+);
+
+// ---- stereo separation ----
+steff = slider18 * 0.01 * morph;
+wid = slider16 * 0.01 + steff;
+wid < 0 ? wid = 0; wid > 2 ? wid = 2;
+hsf = (slider17 + max(steff, 0) * 15) * 0.001 * srate;
+hsf > haaslen - 2 ? hsf = haaslen - 2;
+hb[hp] = r;
+hpos = hp - hsf; hpos < 0 ? hpos += haaslen;
+hi = floor(hpos); hf = hpos - hi;
+hi2 = hi + 1; hi2 >= haaslen ? hi2 -= haaslen;
+r = hb[hi] * (1 - hf) + hb[hi2] * hf;
+hp += 1; hp >= haaslen ? hp = 0;
+mid = (l + r) * 0.5; sid = (l - r) * 0.5 * wid;
+l = mid + sid; r = mid - sid;
+
+// ---- dirty delay (crusher lives in the feedback loop) ----
+deff = slider19 * 0.01 + morph * slider20 * 0.01;
+deff < 0 ? deff = 0; deff > 1 ? deff = 1;
+dri = dp - dsamps; dri < 0 ? dri += dlen;
+gq = 2 ^ (16 - slider23 * 0.1);
+dl = floor(db0[dri] * gq + 0.5) / gq;
+dr = floor(db1[dri] * gq + 0.5) / gq;
+fb = slider22 * 0.01;
+db0[dp] = l + dl * fb;
+db1[dp] = r + dr * fb;
+dp += 1; dp >= dlen ? dp = 0;
+l += dl * deff; r += dr * deff;
+
+spl0 = l;
+spl1 = r;

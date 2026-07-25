@@ -1,0 +1,235 @@
+desc:PietosiGlitch: GhostComp (granular MIDI comper - freeze audio, play it as chords)
+
+// @description PietosiGlitch_GhostComp
+// @version 1.0.0
+// @author pie
+// @provides [effect] .
+//tags: glitch granular sampler morph
+//author: Pietosi
+
+slider1:15<0,100,1>MORPH base %
+slider2:0<0,6,1{Off,Sine,Triangle,Ramp,Square,S&H,Drift}>MORPH LFO shape
+slider3:64<0.25,256,0.25>MORPH LFO period (beats)
+slider4:50<-100,100,1>MORPH LFO depth %
+slider5:0<-100,100,1>Sidechain -> MORPH %
+slider6:150<20,1000,1>Sidechain release ms
+slider7:60<24,96,1>Reference note (pitch of input)
+slider8:1<0,2,1{Live,Auto-hold,Latch}>Freeze mode
+slider9:24<0,96,1>Freeze pad note (24=C0)
+slider10:4<0.5,16,0.5>Capture window (beats)
+slider11:120<20,400,1>Grain size ms
+slider12:50<-100,100,1>Grain shrink -> morph %
+slider13:15<0,100,1>Spray %
+slider14:60<-100,100,1>Spray -> morph %
+slider15:10<0,100,1>Reverse prob %
+slider16:50<-100,100,1>Reverse -> morph %
+slider17:40<0,100,1>Pan spread %
+slider18:40<-100,100,1>Pan -> morph %
+slider19:10<1,500,1>Attack ms
+slider20:250<5,2000,1>Release ms
+slider21:0<0,100,1>Crush amount %
+slider22:50<-100,100,1>Crush -> morph %
+slider23:0<-24,12,0.1>Wet dB
+slider24:100<0,100,1>Dry %
+
+in_pin:left
+in_pin:right
+in_pin:sidechain left
+in_pin:sidechain right
+out_pin:left
+out_pin:right
+
+// Feed it guitar (an item, a DI, anything). It always records the input.
+// MIDI notes play polyphonic grain clouds from the last <window> beats,
+// repitched relative to the Reference note -- hold a chord and you're
+// comping with the recorded sound as the oscillator.
+//   Freeze modes: Live = always follows input. Auto-hold = writing pauses
+//   while notes are held (you comp with what just played). Latch = the
+//   freeze pad note toggles a hard hold. The pad toggles hold in any mode.
+// MORPH drives spray/reverse/grain-shrink/pan/crush: 0% = almost a clean
+// chord, 100% = smeared vapor. Set Dry to 0 for pure instrument use.
+
+@init
+maxlen = srate * 8;
+b0 = 0; b1 = maxlen;
+NV = 8; VS = 32;
+vb = maxlen * 2 + 16;
+freembuf(vb + NV * VS + 64);
+wp = 0;
+i = 0;
+loop(NV, vb[i * VS] = -1; i += 1; );
+latched = 0; held = 0; age = 0;
+lph = 0; prevph = 0; lval = 0; shval = rand(1);
+dph = 0; dtarget = rand(1); driftv = 0.5;
+scenv = 0; msm = 0;
+cnt = 0; hh0 = 0; hh1 = 0;
+
+@slider
+aA = exp(-1/(srate * max(slider19, 1) * 0.001));
+aR = exp(-1/(srate * max(slider20, 5) * 0.001));
+wetg = 2 ^ (slider23 / 6);
+scR = exp(-1/(srate * slider6 * 0.001));
+scA = exp(-1/(srate * 3 * 0.001));
+
+@block
+bspl = max(tempo, 1) / (60 * srate);
+per = max(slider3, 0.25);
+(play_state & 1) ? (
+  lph = beat_position / per; lph -= floor(lph);
+) : (
+  lph += samplesblock * bspl / per; lph -= floor(lph);
+);
+lph < prevph ? shval = rand(1);
+prevph = lph;
+dph += samplesblock * bspl / per * 8;
+dph >= 1 ? ( dph -= floor(dph); dtarget = rand(1); );
+driftv += (dtarget - driftv) * 0.02;
+sh = slider2;
+lval = (sh == 1) ? 0.5 - 0.5 * cos(2 * $pi * lph) :
+       (sh == 2) ? 1 - abs(2 * lph - 1) :
+       (sh == 3) ? lph :
+       (sh == 4) ? (lph < 0.5) :
+       (sh == 5) ? shval :
+       (sh == 6) ? driftv : 0;
+morphblk = slider1 * 0.01 + lval * slider4 * 0.01;
+
+winsamps = slider10 * 60 / max(tempo, 1) * srate;
+winsamps > maxlen - 1024 ? winsamps = maxlen - 1024;
+winsamps < 1024 ? winsamps = 1024;
+glen = slider11 * 0.001 * srate;
+
+while (midirecv(ofs, m1, m2, m3)) (
+  stt = m1 & 0xF0;
+  ison = stt == 0x90 && m3 > 0;
+  isoff = stt == 0x80 || (stt == 0x90 && m3 == 0);
+  ison && m2 == slider9 ? (
+    latched = !latched;
+  ) : ison ? (
+    fv = -1; best = 0; bestage = 999999999;
+    i = 0;
+    loop(NV,
+      (vb[i * VS] < 0 && fv < 0) ? fv = i;
+      vb[i * VS + 6] < bestage ? ( bestage = vb[i * VS + 6]; best = i; );
+      i += 1;
+    );
+    fv < 0 ? (
+      fv = best;
+      (vb[fv * VS] >= 0 && vb[fv * VS + 1]) ? held -= 1;
+    );
+    v = vb + fv * VS;
+    v[0] = m2; v[1] = 1; v[2] = 0; v[3] = m3 / 127;
+    v[4] = rand(1) * winsamps * 0.1;
+    v[5] = 0;
+    v[6] = age; age += 1;
+    v[7] = 0;
+    v[8] = 0; v[18] = 0;
+    held += 1;
+  ) : isoff && m2 != slider9 ? (
+    i = 0;
+    loop(NV,
+      v = vb + i * VS;
+      (v[0] == m2 && v[1]) ? ( v[1] = 0; held -= 1; );
+      i += 1;
+    );
+  );
+  midisend(ofs, m1, m2, m3);
+);
+held < 0 ? held = 0;
+writing = (slider8 == 0) ? !latched :
+          (slider8 == 1) ? (held == 0 && !latched) :
+          !latched;
+
+@sample
+sc = max(abs(spl2), abs(spl3));
+sc > scenv ? scenv = sc + scA * (scenv - sc) : scenv = sc + scR * (scenv - sc);
+m = morphblk + min(scenv * 2, 1) * slider5 * 0.01;
+m < 0 ? m = 0; m > 1 ? m = 1;
+msm += (m - msm) * 0.0008;
+morph = msm;
+
+writing ? (
+  b0[wp] = spl0; b1[wp] = spl1;
+  wp += 1; wp >= maxlen ? wp = 0;
+);
+
+speff = slider13 * 0.01 + morph * slider14 * 0.01;
+speff < 0 ? speff = 0; speff > 1 ? speff = 1;
+rveff = slider15 * 0.01 + morph * slider16 * 0.01;
+rveff < 0 ? rveff = 0; rveff > 1 ? rveff = 1;
+pneff = slider17 * 0.01 + morph * slider18 * 0.01;
+pneff < 0 ? pneff = 0; pneff > 1 ? pneff = 1;
+gshr = morph * slider12 * 0.01;
+gshr < 0 ? gshr = 0; gshr > 0.9 ? gshr = 0.9;
+glenc = glen * (1 - gshr);
+glenc < srate * 0.005 ? glenc = srate * 0.005;
+
+outl = 0; outr = 0;
+i = 0;
+loop(NV,
+  v = vb + i * VS;
+  v[0] >= 0 ? (
+    v[1] ? v[2] = 1 + aA * (v[2] - 1) : v[2] *= aR;
+    (!v[1] && v[2] < 0.0005) ? v[0] = -1 : (
+      v[5] -= 1;
+      v[5] <= 0 ? (
+        g = v + 8 + v[7] * 10;
+        v[7] = !v[7];
+        v[5] = floor(glenc * 0.5);
+        v[5] < 16 ? v[5] = 16;
+        grate = 2 ^ ((v[0] - slider7) / 12);
+        v[4] += glenc * 0.5;
+        v[4] >= winsamps ? v[4] -= winsamps;
+        ofsw = v[4] + (rand(2) - 1) * speff * winsamps * 0.5;
+        ofsw < 0 ? ofsw += winsamps;
+        ofsw >= winsamps ? ofsw -= winsamps;
+        sp = wp - winsamps + ofsw;
+        sp < 0 ? sp += maxlen;
+        g[0] = 1;
+        g[1] = sp;
+        g[2] = rand(1) < rveff ? -grate : grate;
+        g[3] = 0;
+        g[4] = 1 / glenc;
+        pn = 0.5 + (rand(2) - 1) * 0.5 * pneff;
+        g[5] = sqrt(1 - pn); g[6] = sqrt(pn);
+      );
+      ga = 0;
+      loop(2,
+        g = v + 8 + ga * 10;
+        g[0] ? (
+          g[3] >= 1 ? g[0] = 0 : (
+            w = 0.5 - 0.5 * cos(2 * $pi * g[3]);
+            rp = g[1];
+            rii = floor(rp); rff = rp - rii;
+            rii >= maxlen ? rii -= maxlen; rii < 0 ? rii += maxlen;
+            ri2 = rii + 1; ri2 >= maxlen ? ri2 -= maxlen;
+            sm = (b0[rii] * (1 - rff) + b0[ri2] * rff
+                + b1[rii] * (1 - rff) + b1[ri2] * rff) * 0.5;
+            amp = w * v[2] * v[3];
+            outl += sm * amp * g[5];
+            outr += sm * amp * g[6];
+            g[1] += g[2];
+            g[1] >= maxlen ? g[1] -= maxlen; g[1] < 0 ? g[1] += maxlen;
+            g[3] += g[4];
+          );
+        );
+        ga += 1;
+      );
+    );
+  );
+  i += 1;
+);
+
+ceff = slider21 * 0.01 + morph * slider22 * 0.01;
+ceff < 0 ? ceff = 0; ceff > 1 ? ceff = 1;
+ceff > 0.001 ? (
+  fac = 1 + floor(ceff * 19);
+  cnt += 1;
+  cnt >= fac ? ( cnt = 0; hh0 = outl; hh1 = outr; );
+  q = 2 ^ (16 - ceff * 12);
+  outl = floor(hh0 * q + 0.5) / q;
+  outr = floor(hh1 * q + 0.5) / q;
+);
+
+dry = slider24 * 0.01;
+spl0 = spl0 * dry + outl * wetg;
+spl1 = spl1 * dry + outr * wetg;

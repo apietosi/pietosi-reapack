@@ -1,0 +1,60 @@
+desc:PadLab_Router (sample select / humanize)
+
+// @description PadLab_Router
+// @version 1.0.0
+// @author pie
+// @provides [effect] .
+//tags: MIDI processing
+//author: PadLab
+
+// Listens for one pad note and translates it to an internal note (0..63),
+// one per RS5K instance downstream. Mode picks which sample fires.
+// Pitch humanize nudges RS5K's pitch bend (default +/-2 semi range) per hit.
+
+slider1:mode=0<0,2,1{Normal (first sample),Random,Round-Robin}>Select Mode
+slider2:nsamp=1<1,64,1>Sample Count
+slider3:padnote=36<0,127,1>Pad Note
+slider4:humvel=0<0,64,1>Velocity Humanize
+slider5:humpitch=0<0,100,1>Pitch Humanize (cents +/-)
+
+in_pin:none
+out_pin:none
+
+@init
+rr = 0;
+activeidx = -1;
+
+@block
+while (midirecv(ofs, m1, m2, m3)) (
+  st = m1 & 0xF0;
+  ch = m1 & 0x0F;
+  isnote = (st == 0x90 || st == 0x80);
+  n = max(floor(nsamp + 0.5), 1);
+
+  (st == 0x90 && m3 > 0 && m2 == padnote) ? (
+    idx = mode < 0.5 ? 0 :
+          mode < 1.5 ? min(floor(rand(n)), n - 1) :
+          (rr % n);
+    mode >= 1.5 ? rr += 1;
+    v = m3;
+    humvel > 0 ? v = v + floor(rand(humvel * 2 + 1)) - humvel;
+    v = max(1, min(127, v));
+    // random detune per hit via pitch bend (2 semi default range = 200 cents)
+    humpitch > 0 ? (
+      pb = 8192 + floor((rand(2) - 1) * humpitch / 200 * 8192);
+      pb = max(0, min(16383, pb));
+      midisend(ofs, 0xE0 | ch, pb & 127, floor(pb / 128));
+    );
+    activeidx >= 0 ? midisend(ofs, 0x80 | ch, activeidx, 0);
+    midisend(ofs, 0x90 | ch, idx, v);
+    activeidx = idx;
+  ) :
+  ((st == 0x80 || (st == 0x90 && m3 == 0)) && m2 == padnote) ? (
+    activeidx >= 0 ? (
+      midisend(ofs, 0x80 | ch, activeidx, 0);
+      activeidx = -1;
+    );
+  ) :
+  // drop other notes (they belong to other pads); pass CC/pitch/etc through
+  isnote ? 0 : midisend(ofs, m1, m2, m3);
+);

@@ -1,0 +1,54 @@
+desc:PietosiGlitch: KickChokeCrusher (sidechain-driven lofi)
+
+// @description PietosiGlitch_KickChokeCrusher
+// @version 1.0.0
+// @author pie
+// @provides [effect] .
+//tags: glitch bitcrush sidechain
+//author: Pietosi
+
+slider1:10<0,14,0.5>Bit reduction depth (bits removed)
+slider2:12<1,40,1>Max downsample factor
+slider3:3<0.5,20,0.1>SC attack ms
+slider4:150<20,1000,1>SC release ms
+slider5:3<0.5,10,0.1>SC gain
+slider6:100<0,100,1>Amount %
+
+in_pin:left
+in_pin:right
+in_pin:sidechain left
+in_pin:sidechain right
+out_pin:left
+out_pin:right
+
+// Route the kick to channels 3/4 (MixLab's sidechain key does this).
+// The mix is CLEAN while the kick hits and crushes between hits.
+
+@init
+env = 0;
+cnt = 0;
+h0 = 0;
+h1 = 0;
+
+@slider
+ga = exp(-1 / (srate * slider3 * 0.001));
+gr = exp(-1 / (srate * slider4 * 0.001));
+
+@sample
+sc = max(abs(spl2), abs(spl3)) * slider5;
+sc > env ? env = sc + ga * (env - sc) : env = sc + gr * (env - sc);
+duck = min(env, 1);
+amt = (1 - duck) * slider6 * 0.01;
+
+fac = 1 + floor(amt * (slider2 - 1));
+cnt += 1;
+cnt >= fac ? (
+  cnt = 0;
+  h0 = spl0;
+  h1 = spl1;
+);
+
+bits = 16 - amt * slider1;
+q = 2 ^ bits;
+spl0 = floor(h0 * q + 0.5) / q;
+spl1 = floor(h1 * q + 0.5) / q;

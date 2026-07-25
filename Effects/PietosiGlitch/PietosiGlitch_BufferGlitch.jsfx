@@ -1,0 +1,114 @@
+desc:PietosiGlitch: BufferGlitch Pads (MIDI stutter/reverse/dive)
+
+// @description PietosiGlitch_BufferGlitch
+// @version 1.0.0
+// @author pie
+// @provides [effect] .
+//tags: glitch buffer stutter
+//author: Pietosi
+
+slider1:36<0,96,1>Base pad note (36=C1)
+slider2:1<0.25,4,0.25>Stutter unit (beats)
+slider3:0.99993<0.9999,0.99999,0.000002>Tape dive decay
+slider4:100<0,100,1>Wet mix %
+
+in_pin:left
+in_pin:right
+out_pin:left
+out_pin:right
+
+// Pads (from base note):
+//   +0  stutter 1 unit      +1  stutter 1/2 unit
+//   +2  stutter 1/4 unit    +3  stutter 1/8 unit
+//   +4  reverse (2 beats)   +5  half-speed (2 beats)
+//   +6  gate 16ths          +7  tape stop
+
+@init
+maxlen = srate * 8;
+buf0 = 0;
+buf1 = maxlen;
+freembuf(maxlen * 2 + 16);
+wp = 0;
+mode = -1;
+held = -1;
+rate = 1;
+
+@block
+beatlen = srate * 60 / max(tempo, 1);
+while (midirecv(ofs, m1, m2, m3)) (
+  st = m1 & 0xF0;
+  st == 0x90 && m3 > 0 ? (
+    n = m2 - slider1;
+    n >= 0 && n <= 7 ? (
+      held = m2;
+      mode = n;
+      cap = wp;
+      mode == 0 ? rlen = beatlen * slider2;
+      mode == 1 ? rlen = beatlen * slider2 * 0.5;
+      mode == 2 ? rlen = beatlen * slider2 * 0.25;
+      mode == 3 ? rlen = beatlen * slider2 * 0.125;
+      mode == 4 ? rlen = beatlen * 2;
+      mode == 5 ? rlen = beatlen * 2;
+      mode >= 6 ? rlen = beatlen * 4;
+      rlen = min(rlen, maxlen - 64);
+      rlen < 16 ? rlen = 16;
+      rstart = cap - rlen;
+      rstart < 0 ? rstart += maxlen;
+      rp = 0;
+      rpa = cap;
+      rate = 1;
+      gph = 0;
+    );
+  ) : (st == 0x80 || (st == 0x90 && m3 == 0)) ? (
+    m2 == held ? ( mode = -1; held = -1; );
+  );
+  midisend(ofs, m1, m2, m3);
+);
+
+@sample
+buf0[wp] = spl0;
+buf1[wp] = spl1;
+wp += 1;
+wp >= maxlen ? wp = 0;
+
+mode >= 0 ? (
+  o0 = 0;
+  o1 = 0;
+  mode <= 3 ? (
+    idx = rstart + floor(rp);
+    idx >= maxlen ? idx -= maxlen;
+    o0 = buf0[idx];
+    o1 = buf1[idx];
+    rp += 1;
+    rp >= rlen ? rp = 0;
+  ) : mode == 4 ? (
+    idx = cap - 1 - floor(rp);
+    idx < 0 ? idx += maxlen;
+    o0 = buf0[idx];
+    o1 = buf1[idx];
+    rp += 1;
+    rp >= rlen ? rp = 0;
+  ) : mode == 5 ? (
+    idx = rstart + floor(rp);
+    idx >= maxlen ? idx -= maxlen;
+    o0 = buf0[idx];
+    o1 = buf1[idx];
+    rp += 0.5;
+    rp >= rlen ? rp = 0;
+  ) : mode == 6 ? (
+    g = (gph % (beatlen * 0.25)) < (beatlen * 0.125) ? 1 : 0;
+    o0 = spl0 * g;
+    o1 = spl1 * g;
+    gph += 1;
+  ) : (
+    rate *= slider3;
+    rpa += rate;
+    rpa >= maxlen ? rpa -= maxlen;
+    idx = floor(rpa);
+    o0 = buf0[idx] * rate;
+    o1 = buf1[idx] * rate;
+  );
+  w = slider4 * 0.01;
+  spl0 = o0 * w + spl0 * (1 - w);
+  spl1 = o1 * w + spl1 * (1 - w);
+);

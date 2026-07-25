@@ -1,0 +1,85 @@
+desc:PietosiGlitch: ProbabilityGlitch (per-16th random stutter/reverse/crush/gate)
+
+// @description PietosiGlitch_ProbabilityGlitch
+// @version 1.0.0
+// @author pie
+// @provides [effect] .
+//tags: glitch random sequencer
+//author: Pietosi
+
+slider1:15<0,100,1>Stutter probability %
+slider2:10<0,100,1>Reverse probability %
+slider3:10<0,100,1>Crush probability %
+slider4:8<0,100,1>Gate probability %
+slider5:100<0,100,1>Wet mix %
+
+in_pin:left
+in_pin:right
+out_pin:left
+out_pin:right
+
+// Every 16th note rolls the dice. Keep probabilities low (10-20%) and every
+// bar glitches differently, forever. Turn it up for total mangling.
+
+@init
+maxlen = srate * 4;
+buf0 = 0;
+buf1 = maxlen;
+freembuf(maxlen * 2 + 16);
+wp = 0;
+segcnt = 0;
+seglen = srate * 0.125;
+segstart = 0;
+prevstart = 0;
+fx = 0;
+
+@block
+seglen = max(64, srate * 60 / max(tempo, 1) * 0.25);
+
+@sample
+buf0[wp] = spl0;
+buf1[wp] = spl1;
+
+segcnt >= seglen ? (
+  segcnt = 0;
+  prevstart = segstart;
+  segstart = wp;
+  rr = rand(100);
+  fx = 0;
+  rr < slider1 ? fx = 1 :
+  rr < slider1 + slider2 ? fx = 2 :
+  rr < slider1 + slider2 + slider3 ? fx = 3 :
+  rr < slider1 + slider2 + slider3 + slider4 ? fx = 4;
+);
+
+o0 = spl0;
+o1 = spl1;
+fx == 1 ? (
+  half = max(floor(seglen * 0.5), 1);
+  idx = segstart + (segcnt % half);
+  idx >= maxlen ? idx -= maxlen;
+  o0 = buf0[idx];
+  o1 = buf1[idx];
+) : fx == 2 ? (
+  idx = prevstart + seglen - 1 - segcnt;
+  idx >= maxlen ? idx -= maxlen;
+  idx < 0 ? idx += maxlen;
+  o0 = buf0[idx];
+  o1 = buf1[idx];
+) : fx == 3 ? (
+  q = 64;
+  o0 = floor(spl0 * q) / q;
+  o1 = floor(spl1 * q) / q;
+) : fx == 4 ? (
+  g = (segcnt % (seglen * 0.5)) < (seglen * 0.25) ? 1 : 0;
+  o0 *= g;
+  o1 *= g;
+);
+
+w = slider5 * 0.01;
+spl0 = o0 * w + spl0 * (1 - w);
+spl1 = o1 * w + spl1 * (1 - w);
+
+wp += 1;
+wp >= maxlen ? wp = 0;
+segcnt += 1;

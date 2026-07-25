@@ -1,0 +1,31 @@
+desc:PadLab_Monitor (MIDI learn bridge)
+
+// @description PadLab_Monitor
+// @version 1.0.0
+// @author pie
+// @provides [effect] .
+//tags: MIDI processing
+//author: PadLab
+
+// Sits on the PadLab parent track. Passes all MIDI through untouched and
+// mirrors the last note-on / CC into shared gmem so the PadLab GUI script
+// can do MIDI-learn. gmem layout:
+//   [0] event counter   [1] type (1=note, 0=CC)   [2] number   [3] value   [4] channel
+
+options:gmem=PadLab
+
+in_pin:none
+out_pin:none
+
+@block
+while (midirecv(ofs, m1, m2, m3)) (
+  st = m1 & 0xF0;
+  (st == 0x90 && m3 > 0) ? (
+    gmem[1] = 1; gmem[2] = m2; gmem[3] = m3; gmem[4] = m1 & 0x0F;
+    gmem[0] += 1;
+  ) : (st == 0xB0) ? (
+    gmem[1] = 0; gmem[2] = m2; gmem[3] = m3; gmem[4] = m1 & 0x0F;
+    gmem[0] += 1;
+  );
+  midisend(ofs, m1, m2, m3);
+);

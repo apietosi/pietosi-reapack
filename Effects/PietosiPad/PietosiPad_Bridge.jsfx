@@ -1,0 +1,31 @@
+desc:PietosiPad_Bridge
+
+// @description PietosiPad_Bridge - gmem to MIDI hardware out bridge for PietosiPad LEDs
+// @version 1.0.0
+// @author pie
+// @provides [effect] .
+options:gmem=PietosiPad
+in_pin:none
+out_pin:none
+
+// LED feedback bridge for PietosiPad.lua -> Launchpad MK1.
+// Lives on the hidden "#PietosiPad Bridge" track, whose MIDI hardware
+// output is set to the Launchpad. The Lua script writes raw 3-byte MIDI
+// messages into a gmem ring buffer; this JSFX drains it each block.
+//   gmem[0] = write counter, gmem[1] = read counter
+//   message i lives at gmem[16 + (i % 1024) * 3]
+// Sends are throttled to ~400 msg/s, the MK1's LED update ceiling over USB.
+
+@block
+budget = ceil(samplesblock / srate * 400);
+budget < 1 ? budget = 1;
+wp = gmem[0];
+rp = gmem[1];
+wp - rp > 1024 ? rp = wp - 1024;
+while (rp < wp && budget > 0) (
+  base = 16 + (rp % 1024) * 3;
+  midisend(0, gmem[base], gmem[base + 1], gmem[base + 2]);
+  rp += 1;
+  budget -= 1;
+);
+gmem[1] = rp;
