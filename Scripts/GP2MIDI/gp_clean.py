@@ -1,3 +1,4 @@
+# @noindex
 #!/usr/bin/env python
 """
 gp_clean: convert one Guitar Pro tab (.gp3/.gp4/.gp5) to harmonically clean

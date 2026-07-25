@@ -1,7 +1,9 @@
 -- @description gp_import
 -- @version 1.0.0
 -- @author pie
--- @provides [main=main] .
+-- @provides
+--   [main=main] .
+--   gp_clean.py
 --[[
   Import Guitar Pro tab as clean MIDI stems
   ----------------------------------------------------------------------------
