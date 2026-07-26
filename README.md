@@ -19,7 +19,7 @@ Installable via **ReaPack** — one URL gets the whole rig onto any machine.
 **2. Add this repository.** Extensions → ReaPack → Import a repository:
 
 ```
-https://github.com/YOUR-USERNAME/pietosi-reapack/raw/main/index.xml
+https://github.com/apietosi/pietosi-reapack/raw/main/index.xml
 ```
 
 **3. Browse packages**, filter for `Pietosi`, install what you want.
