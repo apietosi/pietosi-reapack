@@ -24,7 +24,6 @@ https://github.com/apietosi/pietosi-reapack/raw/main/index.xml
 
 **3. Browse packages**, filter for `Pietosi`, install what you want.
 
-> Replace `YOUR-USERNAME`. The URL goes live once you've pushed and the Actions run has generated `index.xml`.
 
 Optional extras: **Python 3** with `pyguitarpro` and `mido` for GP2MIDI (`pip install pyguitarpro mido`), and a Launchpad MK1 for PietosiPad.
 
