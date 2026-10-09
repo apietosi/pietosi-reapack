@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" name="PietosiPad" commit="8eb372f0eaedd39e3d4478a53e2c1fc3cce46a1b">
+<index version="1" name="PietosiPad" commit="79c1afcdb36f9afd828ecc37196d187bedf09c09">
   <category name="Effects/PadLab">
     <reapack name="PadLab_Monitor.jsfx" type="effect" desc="PadLab_Monitor (MIDI learn bridge)">
       <version name="1.0.0" author="PadLab" time="2026-07-25T15:46:47Z">
@@ -14,6 +14,13 @@
     <reapack name="PadLab_Router.jsfx" type="effect" desc="PadLab_Router (sample select / humanize)">
       <version name="1.0.0" author="PadLab" time="2026-07-25T15:46:47Z">
         <source type="effect">https://github.com/apietosi/pietosi-reapack/raw/5a4fd1f1475754e60649ec3bb9d1cdf2ae5b7cbd/Effects/PadLab/PadLab_Router.jsfx</source>
+      </version>
+    </reapack>
+  </category>
+  <category name="Effects/PietosiDistort">
+    <reapack name="PietosiDistort_Mantissa.jsfx" type="effect" desc="PietosiDistort_Mantissa">
+      <version name="1.0.0" author="pie" time="2026-10-09T21:14:32Z">
+        <source type="effect">https://github.com/apietosi/pietosi-reapack/raw/79c1afcdb36f9afd828ecc37196d187bedf09c09/Effects/PietosiDistort/PietosiDistort_Mantissa.jsfx</source>
       </version>
     </reapack>
   </category>
@@ -275,6 +282,22 @@
         <source main="main">https://github.com/apietosi/pietosi-reapack/raw/1c2182a1bb2ed410cdac0237b3527263e0375c03/Scripts/PietosiKeys/PietosiKeys_Build.lua</source>
       </version>
     </reapack>
+    <reapack name="PietosiKeys_MidiGridMatch.lua" type="script" desc="PietosiKeys - mirror the Main numpad grid keys into the MIDI editor">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 The MIDI editor has its own action section (32060), so the numpad grid keys bound in Main never reach it. This resolves the MIDI-editor equivalents BY NAME on this machine and writes a minimal keymap containing only those six bindings - nothing else is touched.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Main uses "Grid: Adjust by X" MIDI uses "Grid: Multiply grid size by X"\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Run this, then: Actions window > Key map... (bottom left) > Import... > KeyMaps/PietosiKeys_MidiGrid.ReaperKeyMap\par}
+}
+]]></description>
+      </metadata>
+      <version name="0.1.0" author="pie" time="2026-10-09T21:14:32Z">
+        <source main="main">https://github.com/apietosi/pietosi-reapack/raw/79c1afcdb36f9afd828ecc37196d187bedf09c09/Scripts/PietosiKeys/PietosiKeys_MidiGridMatch.lua</source>
+      </version>
+    </reapack>
     <reapack name="PietosiKeys_ModeHUD.lua" type="script" desc="PietosiKeys ModeHUD - flash the active key-mode on switch">
       <metadata>
         <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
@@ -478,6 +501,94 @@
     <reapack name="Rudiment 9 - Flam Accent.lua" type="script" desc="PietosiRudiments 9 - Flam Accent">
       <version name="1.0.0" author="pie" time="2026-07-25T15:18:16Z">
         <source main="midi_editor">https://github.com/apietosi/pietosi-reapack/raw/1c2182a1bb2ed410cdac0237b3527263e0375c03/Scripts/PietosiRudiments/Rudiment%209%20-%20Flam%20Accent.lua</source>
+      </version>
+    </reapack>
+  </category>
+  <category name="Scripts/PietosiStacks">
+    <reapack name="PietosiStacks_Label.lua" type="script" desc="PietosiStacks_Label">
+      <version name="1.0.0" author="pie" time="2026-10-09T21:14:32Z">
+        <source main="main">https://github.com/apietosi/pietosi-reapack/raw/79c1afcdb36f9afd828ecc37196d187bedf09c09/Scripts/PietosiStacks/PietosiStacks_Label.lua</source>
+      </version>
+    </reapack>
+    <reapack name="PietosiStacks_MakeTestBed.lua" type="script" desc="PietosiStacks_MakeTestBed">
+      <version name="1.0.0" author="pie" time="2026-10-09T21:14:32Z">
+        <source main="main">https://github.com/apietosi/pietosi-reapack/raw/79c1afcdb36f9afd828ecc37196d187bedf09c09/Scripts/PietosiStacks/PietosiStacks_MakeTestBed.lua</source>
+      </version>
+    </reapack>
+    <reapack name="PietosiStacks_Restore.lua" type="script" desc="PietosiStacks_Restore">
+      <version name="1.0.0" author="pie" time="2026-10-09T21:14:32Z">
+        <source main="main">https://github.com/apietosi/pietosi-reapack/raw/79c1afcdb36f9afd828ecc37196d187bedf09c09/Scripts/PietosiStacks/PietosiStacks_Restore.lua</source>
+      </version>
+    </reapack>
+    <reapack name="PietosiStacks_Roll.lua" type="script" desc="PietosiStacks_Roll">
+      <version name="1.0.0" author="pie" time="2026-10-09T21:14:32Z">
+        <source main="main">https://github.com/apietosi/pietosi-reapack/raw/79c1afcdb36f9afd828ecc37196d187bedf09c09/Scripts/PietosiStacks/PietosiStacks_Roll.lua</source>
+      </version>
+    </reapack>
+    <reapack name="PietosiStacks_Unpack.lua" type="script" desc="PietosiStacks_Unpack">
+      <version name="1.0.0" author="pie" time="2026-10-09T21:14:32Z">
+        <source main="main">https://github.com/apietosi/pietosi-reapack/raw/79c1afcdb36f9afd828ecc37196d187bedf09c09/Scripts/PietosiStacks/PietosiStacks_Unpack.lua</source>
+      </version>
+    </reapack>
+    <reapack name="PStacksCore.lua" type="script" desc="PStacksCore - pure logic for the PietosiStacks tools">
+      <version name="1.0.0" author="pie" time="2026-10-09T21:14:32Z">
+        <source>https://github.com/apietosi/pietosi-reapack/raw/79c1afcdb36f9afd828ecc37196d187bedf09c09/Scripts/PietosiStacks/PStacksCore.lua</source>
+      </version>
+    </reapack>
+    <reapack name="PStacksLib.lua" type="script" desc="PStacksLib - REAPER glue for the PietosiStacks tools">
+      <version name="1.0.0" author="pie" time="2026-10-09T21:14:32Z">
+        <source>https://github.com/apietosi/pietosi-reapack/raw/79c1afcdb36f9afd828ecc37196d187bedf09c09/Scripts/PietosiStacks/PStacksLib.lua</source>
+      </version>
+    </reapack>
+    <reapack name="StackLab.lua" type="script" desc="StackLab">
+      <version name="1.0.0" author="pie" time="2026-10-09T21:14:32Z">
+        <source main="main">https://github.com/apietosi/pietosi-reapack/raw/79c1afcdb36f9afd828ecc37196d187bedf09c09/Scripts/PietosiStacks/StackLab.lua</source>
+      </version>
+    </reapack>
+  </category>
+  <category name="Scripts/PietosiStarry">
+    <reapack name="PietosiStarry_Follow.lua" type="script" desc="PietosiStarry Follow - RS5k manager pad page follows the STARRYPAD bank">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 Background watcher. Hit any pad on the Donner STARRYPAD and the RS5k manager flips to that pad's bank (A = 36-51, B = 52-67, ...) and selects the pad. Toggle action; auto-started from __startup.lua.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 The manager only re-reads its track data when the project state count, the edit cursor, or the active project changes. Writing track P_EXT does none of those, so after a write the edit cursor is nudged by a microsecond and put back once the pads go quiet. That is invisible and, unlike an undo point, never lands in the undo history.\par}
+}
+]]></description>
+      </metadata>
+      <version name="1.0.0" author="pie" time="2026-10-09T21:14:32Z">
+        <source main="main">https://github.com/apietosi/pietosi-reapack/raw/79c1afcdb36f9afd828ecc37196d187bedf09c09/Scripts/PietosiStarry/PietosiStarry_Follow.lua</source>
+      </version>
+    </reapack>
+    <reapack name="PietosiStarry_Setup.lua" type="script" desc="PietosiStarry Setup - point the RS5k manager at the STARRYPAD in one go">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 \fmodern Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 One click instead of a trip through the manager's settings:\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Rack layout -> Default 4x4 pads (the only layout the manager pages; Custom never moves, so bank B/C pads were off-screen)\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab MIDI bus default input -> the STARRYPAD, found by name\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab The manager's own "active note follow incoming note" -> off, because it rewrites the old page over ours; Follow selects the pad instead\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Selected kit: page set to bank A, MIDI bus input fixed if it points at a specific device that is not the pad\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Starts PietosiStarry_Follow if it is not running\sa180\par}
+}
+]]></description>
+      </metadata>
+      <version name="1.0.0" author="pie" time="2026-10-09T21:14:32Z">
+        <source main="main">https://github.com/apietosi/pietosi-reapack/raw/79c1afcdb36f9afd828ecc37196d187bedf09c09/Scripts/PietosiStarry/PietosiStarry_Setup.lua</source>
+      </version>
+    </reapack>
+    <reapack name="PStarryCore.lua" type="script" desc="PStarryCore - pure logic for the PietosiStarry tools">
+      <version name="1.0.0" author="pie" time="2026-10-09T21:14:32Z">
+        <source>https://github.com/apietosi/pietosi-reapack/raw/79c1afcdb36f9afd828ecc37196d187bedf09c09/Scripts/PietosiStarry/PStarryCore.lua</source>
+      </version>
+    </reapack>
+    <reapack name="PStarryLib.lua" type="script" desc="PStarryLib - REAPER glue for the PietosiStarry tools">
+      <version name="1.0.0" author="pie" time="2026-10-09T21:14:32Z">
+        <source>https://github.com/apietosi/pietosi-reapack/raw/79c1afcdb36f9afd828ecc37196d187bedf09c09/Scripts/PietosiStarry/PStarryLib.lua</source>
       </version>
     </reapack>
   </category>
