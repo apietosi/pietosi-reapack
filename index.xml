@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" name="PietosiPad" commit="79c1afcdb36f9afd828ecc37196d187bedf09c09">
+<index version="1" name="PietosiPad" commit="289442c130c85de6d06c49a746a08d65cdaa0756">
   <category name="Effects/PadLab">
     <reapack name="PadLab_Monitor.jsfx" type="effect" desc="PadLab_Monitor (MIDI learn bridge)">
       <version name="1.0.0" author="PadLab" time="2026-07-25T15:46:47Z">
@@ -18,6 +18,11 @@
     </reapack>
   </category>
   <category name="Effects/PietosiDistort">
+    <reapack name="PietosiDistort_Bitwise.jsfx" type="effect" desc="PietosiDistort_Bitwise">
+      <version name="1.0.0" author="pie" time="2026-10-09T21:18:47Z">
+        <source type="effect">https://github.com/apietosi/pietosi-reapack/raw/289442c130c85de6d06c49a746a08d65cdaa0756/Effects/PietosiDistort/PietosiDistort_Bitwise.jsfx</source>
+      </version>
+    </reapack>
     <reapack name="PietosiDistort_Mantissa.jsfx" type="effect" desc="PietosiDistort_Mantissa">
       <version name="1.0.0" author="pie" time="2026-10-09T21:14:32Z">
         <source type="effect">https://github.com/apietosi/pietosi-reapack/raw/79c1afcdb36f9afd828ecc37196d187bedf09c09/Effects/PietosiDistort/PietosiDistort_Mantissa.jsfx</source>
