@@ -1,0 +1,143 @@
+desc:PietosiDistort_Bitwise
+// @description PietosiDistort_Bitwise - logic-gate distortion on the integer sample word
+// @version 1.0.0
+// @author pie
+// @provides [effect] .
+
+// Each sample becomes an integer word, then gets XOR / AND / OR / wrap-added
+// against an operand. The Mask picks which bits are touched; bits outside it
+// pass through unchanged.
+//
+//   Operand  Constant      flip (XOR), set (OR) or clear (AND) the mask bits
+//            Delayed Self  the signal fights its own past: comb-like grit
+//            Other Channel L and R scramble each other (mono input = none)
+//            Sidechain 3/4 another track's bits carved into this one
+//            Noise         random bits inside the mask
+//   Format   Sign-Magnitude  ops act on the size only; polarity is kept
+//            Offset Binary   ops hit the sign bit too; harsher, more DC
+//   Gate     below this level the bit op is bypassed (plain quantize), so
+//            silence stays silent instead of turning into a constant buzz
+
+slider1:drive_db=0<-24,36,0.1>Drive (dB)
+slider2:bits=12<4,24,1>Word Length (bits)
+slider3:fmt=0<0,1,1{Sign-Magnitude,Offset Binary}>Format
+slider4:op=0<0,3,1{XOR,AND,OR,Wrap Add}>Operation
+slider5:src=0<0,4,1{Constant,Delayed Self,Other Channel,Sidechain 3/4,Noise}>Operand
+slider6:mpos=4<0,23,1>Mask Position (bits up from LSB)
+slider7:mwid=4<1,24,1>Mask Width (bits)
+slider8:dly=10<0.02,500,0.01:log>Delay (ms)
+slider9:gate_db=-60<-90,-12,0.1>Gate (dB)
+slider10:tone=20000<200,20000,1:log>Tone (Hz)
+slider11:mix=100<0,100,0.1>Mix (%)
+slider12:out_db=0<-36,12,0.1>Output (dB)
+
+in_pin:left input
+in_pin:right input
+in_pin:sidechain left
+in_pin:sidechain right
+out_pin:left output
+out_pin:right output
+
+@init
+BUF0 = 0;
+BUF1 = 262144;
+BUFLEN = 262144;
+wp = 0;
+drv_s = -1;
+env = gs = 0;
+dc_x0 = dc_y0 = dc_x1 = dc_y1 = 0;
+lp0 = lp1 = 0;
+
+// Float -> unsigned integer word in the current format.
+function word(x)
+(
+  fmt == 0 ? min(floor(abs(x) * H), full)
+           : max(min(floor(x * H) + H, full), 0);
+);
+
+// Integer word -> float. sg is the input's polarity (sign-magnitude only).
+function unword(r, sg)
+(
+  fmt == 0 ? sg * r / H : (r - H) / H;
+);
+
+// Combine word a with operand bits s; only the mask bits are affected.
+function bitop(a, s) local(o)
+(
+  op == 1 ? (
+    o = (s & mask) | (full ~ mask);
+    a & o;
+  ) : (
+    o = s & mask;
+    op == 0 ? a ~ o :
+    op == 2 ? a | o :
+              (a + o) % (full + 1);
+  );
+);
+
+@slider
+drv_t = 10 ^ (drive_db / 20);
+out_t = 10 ^ (out_db / 20);
+mix_t = mix / 100;
+drv_s < 0 ? (drv_s = drv_t; out_s = out_t; mix_s = mix_t);
+
+H = 2 ^ (bits - 1);
+nb = fmt == 0 ? bits - 1 : bits;
+full = 2 ^ nb - 1;
+w = max(min(mwid, nb - mpos), 0);
+mask = mpos < nb ? (2 ^ w - 1) * 2 ^ mpos : 0;
+// Constant operand: all ones (flip/set/add) or all zeros (AND clears).
+cs = op == 1 ? 0 : full;
+
+dsamp = max(min(floor(dly * srate / 1000), BUFLEN - 1), 1);
+gate_lin = 10 ^ (gate_db / 20);
+lp_c = exp(-2 * $pi * min(tone, srate * 0.49) / srate);
+dc_c = 1 - 2 * $pi * 10 / srate;
+rel_c = exp(-1 / (0.05 * srate));
+gat_c = 1 - exp(-1 / (0.005 * srate));
+
+@sample
+drv_s += (drv_t - drv_s) * 0.002;
+out_s += (out_t - out_s) * 0.002;
+mix_s += (mix_t - mix_s) * 0.002;
+
+x0 = spl0 * drv_s;
+x1 = spl1 * drv_s;
+BUF0[wp] = x0;
+BUF1[wp] = x1;
+rp = wp - dsamp;
+rp < 0 ? rp += BUFLEN;
+wp = (wp + 1) % BUFLEN;
+
+a0 = word(x0);
+a1 = word(x1);
+
+src == 0 ? (s0 = s1 = cs) :
+src == 1 ? (s0 = word(BUF0[rp]); s1 = word(BUF1[rp])) :
+src == 2 ? (s0 = a1; s1 = a0) :
+src == 3 ? (s0 = word(spl2 * drv_s); s1 = word(spl3 * drv_s)) :
+           (s0 = floor(rand(full + 1)); s1 = floor(rand(full + 1)));
+
+// Gate: bit op only engages while the input is above the threshold.
+pk = max(abs(x0), abs(x1));
+env = pk > env ? pk : env * rel_c;
+gs += ((env > gate_lin) - gs) * gat_c;
+
+g0 = x0 < 0 ? -1 : 1;
+g1 = x1 < 0 ? -1 : 1;
+q0 = unword(a0, g0);
+q1 = unword(a1, g1);
+w0 = q0 + (unword(bitop(a0, s0), g0) - q0) * gs;
+w1 = q1 + (unword(bitop(a1, s1), g1) - q1) * gs;
+
+// DC blocker: offset-binary and constant operands add steady offsets.
+dc_y0 = w0 - dc_x0 + dc_c * dc_y0; dc_x0 = w0; w0 = dc_y0;
+dc_y1 = w1 - dc_x1 + dc_c * dc_y1; dc_x1 = w1; w1 = dc_y1;
+
+tone < 20000 ? (
+  w0 = lp0 = w0 + (lp0 - w0) * lp_c;
+  w1 = lp1 = w1 + (lp1 - w1) * lp_c;
+);
+
+spl0 = (spl0 + (w0 - spl0) * mix_s) * out_s;
+spl1 = (spl1 + (w1 - spl1) * mix_s) * out_s;
