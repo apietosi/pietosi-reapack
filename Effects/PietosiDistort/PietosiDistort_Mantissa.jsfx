@@ -1,0 +1,80 @@
+desc:PietosiDistort_Mantissa
+// @description PietosiDistort_Mantissa - float-mantissa truncation distortion
+// @version 1.0.0
+// @author pie
+// @provides [effect] .
+
+// Distortion by throwing away floating-point precision instead of bits.
+// Each sample is split into sign * 2^exponent * mantissa. Only the mantissa
+// is quantized, so the error is relative to the sample's own size: a quiet
+// tail is exactly as gritty as a loud hit (a bitcrusher gets cleaner as it
+// gets louder). Every octave of level gets the same number of steps.
+//
+//   Mantissa Bits  steps per octave = 2^bits (fractional values crossfade)
+//   Exponent Step  octaves per exponent step; >1 widens each step band
+//   Floor          exponent underflow: anything below is flushed to zero
+//   Ceiling        exponent overflow: magnitudes clamp here
+//   Rounding       Round / Truncate (toward zero, darker) / Stochastic (noisy)
+
+slider1:drive_db=0<-24,36,0.1>Drive (dB)
+slider2:bits=3<0,12,0.01>Mantissa Bits
+slider3:estep=1<1,6,1>Exponent Step (octaves)
+slider4:floor_db=-120<-120,-12,0.1>Floor (dB)
+slider5:ceil_db=0<-36,12,0.1>Ceiling (dB)
+slider6:mode=0<0,2,1{Round,Truncate,Stochastic}>Rounding
+slider7:tone=20000<200,20000,1:log>Tone (Hz)
+slider8:mix=100<0,100,0.1>Mix (%)
+slider9:out_db=0<-36,12,0.1>Output (dB)
+
+@init
+INV_LN2 = 1 / log(2);
+drv_s = out_s = mix_s = -1;
+lp0 = lp1 = 0;
+
+// Quantize the mantissa of x to nb fractional bits.
+function mq(x, nb) local(a, e, scale, m, steps, r)
+(
+  a = abs(x);
+  a < floor_lin ? 0 : (
+    e = floor(log(a) * INV_LN2 / estep) * estep;
+    scale = 2 ^ e;
+    m = a / scale - 1;
+    steps = 2 ^ nb;
+    m = floor(m * steps + (mode == 0 ? 0.5 : mode == 1 ? 0 : rand(1))) / steps;
+    r = (1 + m) * scale;
+    r > ceil_lin ? r = ceil_lin;
+    x < 0 ? -r : r;
+  );
+);
+
+// Fractional bit depth: crossfade the two neighbouring integer depths.
+function crush(x) local(lo, f)
+(
+  lo = floor(bits);
+  f = bits - lo;
+  f > 0 ? mq(x, lo) * (1 - f) + mq(x, lo + 1) * f : mq(x, lo);
+);
+
+@slider
+drv_t = 10 ^ (drive_db / 20);
+out_t = 10 ^ (out_db / 20);
+mix_t = mix / 100;
+floor_lin = 10 ^ (floor_db / 20);
+ceil_lin = 10 ^ (ceil_db / 20);
+lp_c = exp(-2 * $pi * min(tone, srate * 0.49) / srate);
+drv_s < 0 ? (drv_s = drv_t; out_s = out_t; mix_s = mix_t);
+
+@sample
+drv_s += (drv_t - drv_s) * 0.002;
+out_s += (out_t - out_s) * 0.002;
+mix_s += (mix_t - mix_s) * 0.002;
+
+w0 = crush(spl0 * drv_s);
+w1 = crush(spl1 * drv_s);
+tone < 20000 ? (
+  w0 = lp0 = w0 + (lp0 - w0) * lp_c;
+  w1 = lp1 = w1 + (lp1 - w1) * lp_c;
+);
+
+spl0 = (spl0 + (w0 - spl0) * mix_s) * out_s;
+spl1 = (spl1 + (w1 - spl1) * mix_s) * out_s;
