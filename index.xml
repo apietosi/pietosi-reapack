@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" name="PietosiPad" commit="289442c130c85de6d06c49a746a08d65cdaa0756">
+<index version="1" name="PietosiPad" commit="f0cd0e120bf2074b10fa7619fb4fb6be9d5e8ed4">
   <category name="Effects/PadLab">
     <reapack name="PadLab_Monitor.jsfx" type="effect" desc="PadLab_Monitor (MIDI learn bridge)">
       <version name="1.0.0" author="PadLab" time="2026-07-25T15:46:47Z">
@@ -26,6 +26,11 @@
     <reapack name="PietosiDistort_Mantissa.jsfx" type="effect" desc="PietosiDistort_Mantissa">
       <version name="1.0.0" author="pie" time="2026-10-09T21:14:32Z">
         <source type="effect">https://github.com/apietosi/pietosi-reapack/raw/79c1afcdb36f9afd828ecc37196d187bedf09c09/Effects/PietosiDistort/PietosiDistort_Mantissa.jsfx</source>
+      </version>
+    </reapack>
+    <reapack name="PietosiDistort_Spectral.jsfx" type="effect" desc="PietosiDistort_Spectral">
+      <version name="1.0.0" author="pie" time="2026-10-09T21:48:48Z">
+        <source type="effect">https://github.com/apietosi/pietosi-reapack/raw/f0cd0e120bf2074b10fa7619fb4fb6be9d5e8ed4/Effects/PietosiDistort/PietosiDistort_Spectral.jsfx</source>
       </version>
     </reapack>
   </category>
