@@ -1,0 +1,164 @@
+desc:PietosiDistort_Spectral
+// @description PietosiDistort_Spectral - clips every frequency bin on its own
+// @version 1.0.0
+// @author pie
+// @provides [effect] .
+
+// Distortion in the frequency domain. Instead of clipping the waveform, the
+// signal is split into FFT bins and each bin's loudness is clipped, folded
+// or quantized separately. Loud partials get flattened while quiet ones are
+// left alone, so there are no new harmonics in the usual sense: the spectrum
+// itself gets squashed, like a clipped vocoder.
+//
+//   Ceiling      per-bin limit; a full-scale sine's bin reads 0 dB
+//   Clip Shape   Hard / Soft (tanh) / Fold (loud bins fold back down: holes)
+//   Flatten      pulls every bin toward the ceiling; 100% = whitened, robotic
+//   Mag Steps    quantize each bin's level in dB steps: stepped, grainy
+//   Phase Steps  quantize each bin's phase; 1 = robot voice, 2-8 = metallic
+//   Floor        bins quieter than this are untouched (keeps silence silent)
+//   Low / High   only bins inside this band are processed
+//   FFT Size     bigger = smoother, more smeared; smaller = more transient
+// Latency is one FFT length and is reported to REAPER for compensation.
+
+slider1:drive_db=0<-12,48,0.1>Drive (dB)
+slider2:ceil_db=-30<-80,0,0.1>Ceiling (dB)
+slider3:shape=0<0,2,1{Hard,Soft,Fold}>Clip Shape
+slider4:flat=0<0,100,0.1>Flatten (%)
+slider5:mstep=0<0,24,0.1>Mag Steps (dB, 0 = off)
+slider6:pstep_n=0<0,32,1>Phase Steps (0 = off)
+slider7:floor_db=-100<-140,-30,0.1>Floor (dB)
+slider8:lo_hz=20<20,20000,1:log>Low (Hz)
+slider9:hi_hz=20000<20,20000,1:log>High (Hz)
+slider10:nsel=2<0,3,1{512,1024,2048,4096}>FFT Size
+slider11:mix=100<0,100,0.1>Mix (%)
+slider12:out_db=0<-36,24,0.1>Output (dB)
+
+@init
+MAXN = 4096;
+IN0 = 0;
+IN1 = MAXN;
+OUT0 = MAXN * 2;
+OUT1 = MAXN * 3;
+WIN = MAXN * 4;
+F0 = MAXN * 5;
+F1 = MAXN * 7;
+N = 0;
+out_s = -1;
+
+// Triangle fold of x into [0, T].
+function fold(x, t) local(u)
+(
+  u = x / t;
+  u -= 2 * floor(u / 2);
+  u > 1 ? u = 2 - u;
+  u * t;
+);
+
+// Process bins 0..N/2 of spectrum F in place, then rebuild the mirror half.
+function proc(F) local(k, re, im, m, x, db, p, mo, g, r2, i2)
+(
+  k = 0;
+  loop(N / 2 + 1,
+    re = F[2 * k];
+    im = F[2 * k + 1];
+    m = sqrt(re * re + im * im);
+    x = m * nrm;
+    k >= klo && k <= khi && x > floor_lin ? (
+      x *= drv;
+      flat > 0 ? x = T * (x / T) ^ (1 - flat / 100);
+      x = shape == 0 ? min(x, T) : shape == 1 ? T * tanh(x / T) : fold(x, T);
+      mstep > 0 ? (
+        db = floor(20 * log10(x) / mstep + 0.5) * mstep;
+        x = 10 ^ (db / 20);
+      );
+      mo = x / nrm;
+      pstep_n > 0 ? (
+        p = floor(atan2(im, re) / pq + 0.5) * pq;
+        r2 = mo * cos(p);
+        i2 = mo * sin(p);
+      ) : (
+        g = mo / m;
+        r2 = re * g;
+        i2 = im * g;
+      );
+      F[2 * k] = re + (r2 - re) * mixv;
+      F[2 * k + 1] = im + (i2 - im) * mixv;
+    );
+    k += 1;
+  );
+  F[1] = 0;
+  F[N + 1] = 0;
+  k = 1;
+  loop(N / 2 - 1,
+    F[2 * (N - k)] = F[2 * k];
+    F[2 * (N - k) + 1] = -F[2 * k + 1];
+    k += 1;
+  );
+);
+
+@slider
+nn = 2 ^ (9 + nsel);
+nn != N ? (
+  N = nn;
+  hop = N / 4;
+  memset(IN0, 0, MAXN * 4);
+  ip = cnt = 0;
+  i = 0;
+  loop(N, WIN[i] = 0.5 - 0.5 * cos(2 * $pi * i / N); i += 1);
+  pdc_delay = N;
+  pdc_bot_ch = 0;
+  pdc_top_ch = 2;
+);
+drv = 10 ^ (drive_db / 20);
+T = 10 ^ (ceil_db / 20);
+floor_lin = 10 ^ (floor_db / 20);
+mixv = mix / 100;
+pq = pstep_n > 0 ? 2 * $pi / pstep_n : 1;
+klo = floor(min(lo_hz, hi_hz) * N / srate);
+khi = ceil(max(lo_hz, hi_hz) * N / srate);
+// A full-scale sine's peak bin (Hann window) has magnitude N/4.
+nrm = 4 / N;
+// Hann^2 at 75% overlap sums to 1.5; ifft is unnormalized (x N).
+osc = 1 / (1.5 * N);
+out_t = 10 ^ (out_db / 20);
+out_s < 0 ? out_s = out_t;
+
+@sample
+out_s += (out_t - out_s) * 0.002;
+
+IN0[ip] = spl0;
+IN1[ip] = spl1;
+y0 = OUT0[ip];
+y1 = OUT1[ip];
+OUT0[ip] = OUT1[ip] = 0;
+ip += 1;
+ip >= N ? ip = 0;
+
+cnt += 1;
+cnt >= hop ? (
+  cnt = 0;
+  j = 0;
+  idx = ip;
+  loop(N,
+    F0[2 * j] = IN0[idx] * WIN[j];
+    F1[2 * j] = IN1[idx] * WIN[j];
+    F0[2 * j + 1] = F1[2 * j + 1] = 0;
+    idx += 1;
+    idx >= N ? idx = 0;
+    j += 1;
+  );
+  fft(F0, N); fft_permute(F0, N); proc(F0); fft_ipermute(F0, N); ifft(F0, N);
+  fft(F1, N); fft_permute(F1, N); proc(F1); fft_ipermute(F1, N); ifft(F1, N);
+  j = 0;
+  idx = ip;
+  loop(N,
+    OUT0[idx] += F0[2 * j] * WIN[j] * osc;
+    OUT1[idx] += F1[2 * j] * WIN[j] * osc;
+    idx += 1;
+    idx >= N ? idx = 0;
+    j += 1;
+  );
+);
+
+spl0 = y0 * out_s;
+spl1 = y1 * out_s;
